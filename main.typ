@@ -60,6 +60,9 @@
 
 = Cronograma
 
+Vamos a referenciar la siguiente xD @schuele_rafat_kossykh_1996
+
 // Supposedly it also works as works.bib
 // #bibliography("works.bib")
-#bibliography("reference.yml")
+#bibliography(("ref.yml", "ref.bib"))
+// #bibliography("ref.bib")
