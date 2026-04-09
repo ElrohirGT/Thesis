@@ -52,10 +52,13 @@
 
 = Objetivos
 
-Desarrollo de un sistema de software para la computadora a bordo (OBC por sus siglas en inglés) del Quetzal-2 capaz de tomar y enviar fotografías utilizando al menos 3 modos de operación en un ambiente controlado terrestre, con una tasa de éxito de transmisión mayor o igual a 95%.
+Desarrollar un sistema de software para la OBC _inhouse_ del Quetzal-2 capaz de la toma y envío de fotografias utilizando distintos modos de operación en un ambiente controlado terrestre y permita que el sistema de software OBC principal tome el control de la misión.
+  + Integrar el módulo de la cámara al sistema de software de la computadora a bordo, logrando la toma y envío exitoso de fotografías del payload MILO al payload OBC.
+  + Desarrollar el sistema base de gestión de modos de operación del software de la computadora a bordo, contemplando un mínimo de tres modos: Arranque, Toma de fotografía y Nominal preliminar con transiciones entre toma de fotografía y nominal preliminar sin fallos.
+  + Desarrollar el MVP del sistema de handover entre la OBC principal y la OBC _inhouse_ de la misión que permita intercambiar control del subsistema MILO.
+
+Objetivo secundario que posiblemente no sea parte de los 3 finales:
   + Definición del ambiente controlado y sus parámetros, permitiendo la ejecución y prueba del sistema de software en La Tierra según los estándares del laboratorio aerosepacial UVG.
-  + Integrar el módulo de la cámara al sistema de software de la computadora a bordo, logrando la toma y envío exitoso con una tasa de transmisión mayor o igual al 95% con una resolución dada por los parámetros del ambiente controlado.
-  + Desarrollar e implementar el sistema base de gestión de modos de operación del software de la computadora a bordo, contemplando un mínimo de tres modos: Arranque, Toma de fotografía y Nominal preliminar con transiciones entre toma de fotografía y nominal preliminar sin fallos.
 
 = Cronograma
 
