@@ -1,4 +1,3 @@
-
 #set text(
   lang:"es",
   region: "gt"
@@ -12,7 +11,7 @@
   //   Glacier Flow
   // ],
   numbering: "1",
-  columns: 2,
+  columns: 1,
 )
 #show title: set text(size: 17pt)
 #show title: set align(center)
@@ -61,8 +60,6 @@ Objetivo secundario que posiblemente no sea parte de los 3 finales:
   + Definición del ambiente controlado y sus parámetros, permitiendo la ejecución y prueba del sistema de software en La Tierra según los estándares del laboratorio aerosepacial UVG.
 
 = Cronograma
-
-Vamos a referenciar la siguiente xD @schuele_rafat_kossykh_1996
 
 // Supposedly it also works as works.bib
 // #bibliography("works.bib")
