@@ -49,17 +49,19 @@
 = Introduction
 #lorem(300)
 
+- Contexto (Qué es y por qué?)
+- ¿Cómo se va a hacer?
+- Resultados Esperados
+
 = Objetivos
 
-Desarrollar un sistema de software para la OBC _inhouse_ del Quetzal-2 capaz de la toma y envío de fotografias utilizando distintos modos de operación en un ambiente controlado terrestre y permita que el sistema de software OBC principal tome el control de la misión.
-  + Integrar el módulo de la cámara al sistema de software de la computadora a bordo, logrando la toma y envío exitoso de fotografías del payload MILO al payload OBC.
-  + Desarrollar el sistema base de gestión de modos de operación del software de la computadora a bordo, contemplando un mínimo de tres modos: Arranque, Toma de fotografía y Nominal preliminar con transiciones entre toma de fotografía y nominal preliminar sin fallos.
-  + Desarrollar el MVP del sistema de handover entre la OBC principal y la OBC _inhouse_ de la misión que permita intercambiar control del subsistema MILO.
-
-Objetivo secundario que posiblemente no sea parte de los 3 finales:
-  + Definición del ambiente controlado y sus parámetros, permitiendo la ejecución y prueba del sistema de software en La Tierra según los estándares del laboratorio aerosepacial UVG.
+Desarrollar e implementar un sistema de software para la computadora a bordo diseñada localmente del Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de handover con la computadora principal, validado en un entorno controlado terrestre.
++ Integrar el módulo de cámara al sistema de software de la computadora a bordo, logrando la captura y transmisión de al menos una secuencia de imágenes desde la carga útil MILO hacia la computadora a bordo desarrollada localmente, sin errores de comunicación en pruebas controladas. 
++ Desarrollar el sistema base de gestión de modos de operación del software, implementando al menos tres modos (Arranque, Toma de fotografía y Nominal preliminar), validando transiciones correctas entre los modos de Toma de fotografía y Nominal preliminar sin pérdida de funcionalidad. 
++ Desarrollar un MVP del sistema de handover entre la computadora principal y la computadora diseñada localmente, que permita transferir y recuperar el control de la carga útil MILO mediante comandos definidos y verificados en pruebas de integración.
 
 = Cronograma
+
 
 // Supposedly it also works as works.bib
 // #bibliography("works.bib")
