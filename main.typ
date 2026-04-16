@@ -23,6 +23,85 @@
 #show heading: smallcaps
 
 
+#set page(
+  paper: "a4",
+  margin: (top: 3cm, bottom: 3cm, left: 3cm, right: 3cm),
+)
+
+#set text(font: "New Computer Modern", size: 12pt)
+
+#align(center)[
+  // Nombre de la institución u organización (opcional)
+  #text(size: 14pt, weight: "bold")[
+    Universidad del Valle de Guatemala
+  ]
+
+  #v(0.5cm)
+
+  // Línea decorativa superior
+  #line(length: 100%, stroke: 0.5pt)
+
+  #v(2cm)
+
+  // Título principal
+  #text(size: 22pt, weight: "bold")[
+    Desarrollo de un Sistema de Software para la Computadora a Bordo del Satélite Quetzal-2
+  ]
+
+  #v(0.5cm)
+
+  // Subtítulo (opcional)
+  #text(size: 14pt, style: "italic", fill: luma(80))[
+    // TODO: Add subtitle
+  ]
+
+  #v(2cm)
+
+  // Imagen central
+  #box(
+    width: 6cm,
+    height: 6cm,
+    stroke: 0.5pt + luma(180),
+    radius: 4pt,
+  )[
+    #align(center + horizon)[
+      // Reemplaza "imagen.png" con la ruta de tu imagen
+      // #image("imagen.png", width: 100%)
+
+      // Placeholder si no hay imagen
+      #text(size: 10pt, fill: luma(150))[
+        [ #image("uvg_logo.png", width: 100%) ]
+      ]
+    ]
+  ]
+
+  #v(2cm)
+
+  // Línea decorativa inferior
+  #line(length: 100%, stroke: 0.5pt)
+
+  #v(1cm)
+
+  // Información del autor
+  #text(size: 12pt)[
+    *Autor:* Flavio André Galán Donis
+  ]
+
+  #v(0.4cm)
+
+  // Curso o materia (opcional)
+  #text(size: 12pt)[
+    *Curso:* Diseño e Innovación
+  ]
+
+  #v(1cm)
+
+  // Fecha
+  #text(size: 12pt, fill: luma(60))[
+    Guatemala, 15 de abril de 2026
+  ]
+]
+
 #place(
   top + center,
   float: true,
@@ -30,7 +109,7 @@
   clearance: 2em,
 )[
   #title[
-    Dummy Title
+    Desarrollo de un Sistema de Software para la Computadora a Bordo del Satélite Quetzal-2
   ]
   #grid(
     columns: (1fr),
@@ -42,19 +121,18 @@
   )
   #par(justify: false)[
     *Resumen/Abstract* \
-    // TODO: Añadir Abstract
-    #lorem(80)
+    El Quetzal-2 es un CubeSat 2U desarrollado como proyecto académico por estudiantes y staff UVG el cual pondrá a prueba una OBC diseñada localmente que ejecutará una inteligencia artificial capaz de identificar nubes. Este nanosatélite cuenta con una computadora a bordo compuesta de por dos unidades de procesamiento, una _of the shelf_ de GOMSPACE y otra desarrollada localmente utilizando las Portentas H7 de Arduino.
+    Las OBC son sistemas vitales dentro de una misión espacial puesto que gestionan todos los subsistemas del satélite así como la comunicación entre estos. Este proyecto se centra en las bases de esta OBC local a nivel de software, sentando las bases para los distintos modos de operación que necesitará la misión, la toma de fotografías y la interoperabilidad entre las dos unidades de procesamiento que componen la OBC completa.
+    El impacto de esta OBC desarrollada localmente representaría un gran punto de inicio para próximas misiones espaciales, bajando aún más la barrera económica de entrada para desarrollar misiones espaciales, puesto que demostraría que no es necesario el uso de hardware altamente costoso con muchas más protecciones para llevar a cabo una misión exitosa.
   ]
 ]
 
 = Introducción
 // #lorem(300)
-//
-// TODO: Describir que Quetzal-2 es un CubeSat.
 
 El Quetzal-2 es un proyecto académico desarrollado por estudiantes y staff UVG la cual pondrá a prueba una computadora a bordo diseñada en UVG capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Este proyecto es importante no solo porque representa un avance tecnológico en Guatemala, sino también por su impacto dentro de la juventud del país, inspirando a futuros científicos, ingenieros e innovadores.
 
-La misión espacial Quetzal-2 cuenta con 4 objetivos específicos que busca completar, llamadas cargas útiles (_Payloads_ en inglés). Para este trabajo de graduación nos interesa específicamente _Payload MILO_, el subsistema encargado del reconocimiento de nubosidad y la toma de fotografías en el espacio @quetzal_2.
+La misión espacial es un CubeSat 2U, 10x20x10cm y con un peso máximo de 4kg @johnstone_2022 y cuenta con 4 objetivos específicos que busca completar, llamadas cargas útiles (_Payloads_ en inglés). Para este trabajo de graduación nos interesa específicamente _Payload MILO_, el subsistema encargado del reconocimiento de nubosidad y la toma de fotografías en el espacio @quetzal_2.
 
 Las computadoras a bordo (OBC, por sus siglas en inglés) cumplen un papel clave dentro de los subsistemas del satélite puesto que son las encargadas de manejar todas las tareas, intercambio de información entre módulos y la colecta de información sobre los demás subsistemas (_housekeeping_) antes de la conexión con la estación en tierra @lwabanji_wilkinson_biermann_bellville_2013.
 
