@@ -87,7 +87,7 @@
     *Autor:* Flavio André Galán Donis
   ]
 
-  #v(0.4cm)
+  // #v(0.4cm)
 
   // Curso o materia (opcional)
   #text(size: 12pt)[
@@ -128,7 +128,6 @@
 ]
 
 = Introducción
-// #lorem(300)
 
 El Quetzal-2 es un proyecto académico desarrollado por estudiantes y staff UVG la cual pondrá a prueba una computadora a bordo diseñada en UVG capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Este proyecto es importante no solo porque representa un avance tecnológico en Guatemala, sino también por su impacto dentro de la juventud del país, inspirando a futuros científicos, ingenieros e innovadores.
 
@@ -146,17 +145,37 @@ La inicialización, intercomunicación y gestión de todos estos subsistemas rec
 
 Este trabajo profesional busca desarrollar un sistema de software para la computadora a bordo diseñada localmente (_in-house_) capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de handover con la computadora principal, validado en un entorno controlado terrestre. Para el desarrollo de este sistema se utilizará una metodología propia del laboratorio espacial UVG, basada en la metodología de ingeniería de sistemas de la NASA @hirshorn_2007.
 
+#pagebreak()
+= Antecedentes
++ Investigacion preliminar.
+
+#pagebreak()
 = Objetivos
 
-Desarrollar un sistema de software para la computadora a bordo diseñada localmente del Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de handover con la computadora principal, validado en un entorno controlado terrestre.
+Desarrollar las bases de un _inflight software_ para la computadora a bordo diseñada localmente del Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de handover con la computadora principal, validado en un entorno controlado terrestre.
 + Integrar el módulo de cámara al sistema de software de la computadora a bordo, logrando la captura y transmisión de al menos una secuencia de imágenes desde la carga útil MILO hacia la computadora a bordo desarrollada localmente, sin errores de comunicación en pruebas controladas. 
 + Desarrollar el sistema base de gestión de modos de operación del software, implementando al menos tres modos (Arranque, Toma de fotografía y Nominal preliminar), validando transiciones correctas entre los modos de Toma de fotografía y Nominal preliminar sin pérdida de funcionalidad. 
 + Desarrollar un MVP del sistema de handover entre la computadora principal y la computadora diseñada localmente, que permita transferir y recuperar el control de la carga útil MILO mediante comandos definidos y verificados en pruebas de integración.
 
-= Cronograma
+#pagebreak()
+= Justificación
+
+La misión espacial de Quetzal-2 tiene como misión principal probar una computadora a bordo (diseñada en UVG) que sea capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2.
+
++ Por qué hacer un inflight software en lugar de utilizar uno comprado.
++ Por qué se utilizan las tecnologias que utilizaste.
++ También se cita.
+
+#pagebreak()
+= Metodología
+
+#pagebreak()
+= Plan de Trabajo
++ Cronograma
 
 
 // Supposedly it also works as works.bib
 // #bibliography("works.bib")
+#pagebreak()
 #bibliography(("ref.yml", "ref.bib"))
 // #bibliography("ref.bib")
