@@ -161,7 +161,7 @@ Desarrollar localmente las bases de un _inflight software_ para la OBC diseñada
 #pagebreak()
 = Justificación
 
-La misión espacial de Quetzal-2 tiene como misión principal probar una computadora a bordo (diseñada en UVG) que sea capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Al ser una misión académica y no un proyecto de gobierno o una multinacional como Tesla, los recursos económicos son relativamente limitados. Esto genera una necesidad de reducir costos en donde sea posible y por lo tanto, un _software_ diseñado _inhouse_ adaptado a las necesidad específicas de la misión pero con oportunidad de ser extendido a otras misiones futuras capaz de ejecutarse dentro de componentes más baratos suena muy atractivo, dando origen a este proyecto.
+El proyecto espacial de Quetzal-2 tiene como misión principal probar una computadora a bordo (diseñada en UVG) que sea capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Al ser una misión académica y no un proyecto de gobierno o una multinacional como Tesla, los recursos económicos son relativamente limitados. Esto genera una necesidad de reducir costos en donde sea posible y por lo tanto, un _software_ diseñado _inhouse_ adaptado a las necesidad específicas de la misión pero con oportunidad de ser extendido a otras misiones futuras capaz de ejecutarse dentro de componentes más baratos suena muy atractivo, dando origen a este proyecto.
 
 Otra limitante dentro de estos sistemas es el bajo presupuesto de energía con el que se cuenta. En general, esto afecta la potencia de los microcontroladores que se pueden utilizar, pues se tiene que balancear disponibilidad del sistema y potencia @lwabanji_wilkinson_biermann_bellville_2013. Por lo tanto, esta clase de sistemas espaciales generalmente utilizan sistemas operativos en tiempo real (RTOS por sus siglas en inglés) debido a que ofrecen un mayor control sobre el orquestamiento de tareas permitiendo así (de forma indirecta) un mayor control sobre el uso de energía.
 
@@ -183,6 +183,8 @@ Se seguirá una metodología kanban de trabajo, con columnas que representan los
 Además para la documentación y organización de los módulos se utilizará una metodología propia del laboratorio pero que tiene sus bases en _Systems Engineering_, una metodología utilizada por la _National AeroSpace Agency_ (NASA) para sus proyectos @nasa_systems_engineering.
 
 La modalidad será en su mayoría presencial debido a que para realizar pruebas se necesita hardware específico que se encuentra disponible solamente dentro del laboratorio aeroespacial UVG. Sin embargo, el desarrollo de _software_ tiene la gran ventaja que puede ser trabajado de forma remota también, por lo que ocasionalmente se tendrán sesiones asíncronas remotas de desarrollo.
+
+Considero importante recalcar, que este proyecto, aunque busca desarrollar una base para el _inflight software_ que será utilizado dentro de la misión espacial UVG Quetzal-2, no realizará ningún desarrollo sobre la inteligencia artificial que se llevará a bordo ni tampoco busca generar un sistema operativo diseñado a la medida para la misión. El enfoque principal es el _inflight software_.
 
 #pagebreak()
 = Plan de Trabajo
