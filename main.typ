@@ -280,6 +280,5 @@ A continuación se detallan las fases del proyecto y qué se busca completar en 
 
 // Supposedly it also works as works.bib
 // #bibliography("works.bib")
-#pagebreak()
 #bibliography(("ref.yml", "ref.bib"))
 // #bibliography("ref.bib")
