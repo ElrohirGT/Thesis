@@ -184,7 +184,7 @@ A continuación se detallan las fases del proyecto y qué se busca completar en 
 + Fase 2: Esta fase busca implementar el sistema de gestión de modos de operación de la OBC secundaria desarrollada localmente. Por lo tanto, se necesita realizar un diseño de la arquitectura en general donde se considere definidión y cambio de modos de operación, además de un camino claro para realizar pruebas de esta implementación. Luego se procede con la implementación de los distintos modos de operación validando que la toma y envío de fotografía siga funcionando.
 + Fase 3: Esta fase tiene como objetivo principal implementar el MVP del _handover_ entre la OBC principal y la OBC secundaria. Para cumplir con este objetivo se necesita establecer una comunicación entre ambas OBCs utilizando el protocolo definido por nuestro líder de módulo e implementar los distintos comandos de toma y retiro de control de la OBC secundaria. Finalmente, se necesita evaluar el correcto funcionamiento de todo el sistema con pruebas de funcionamiento.
 
-#pagebreak()
+// #pagebreak()
 = Plan de Trabajo
 
 #let phases = (
@@ -280,5 +280,6 @@ A continuación se detallan las fases del proyecto y qué se busca completar en 
 
 // Supposedly it also works as works.bib
 // #bibliography("works.bib")
+#pagebreak()
 #bibliography(("ref.yml", "ref.bib"))
 // #bibliography("ref.bib")
