@@ -170,7 +170,7 @@ Debido a que FreeRTOS expone un API oficial en C para su desarrollo @freertos_20
 
 Para la documentación y organización de los módulos se utiliza una metodología propia del laboratorio pero que tiene sus bases en _Systems Engineering_, una metodología utilizada por la _National AeroSpace Agency_ (NASA por sus siglás en inglés) para sus proyectos @nasa_systems_engineering.
 
-Debido al reducido tamaño del equipo de desarrollo del _inflight software_ y a las prioridades cambiantes que puede tener el proyecto se utiliza la metodología Kanban, a continuación se presentan los 3 posibles estados en los que se puede encontrar una tarea dentro de esta metodología:
+Debido al reducido tamaño del equipo de desarrollo del _inflight software_ y a las prioridades cambiantes que puede tener el proyecto (por ejemplo, el cambio de protocolos) se utiliza la metodología Kanban, a continuación se presentan los 3 posibles estados en los que se puede encontrar una tarea dentro de esta metodología:
 
 + Por hacer: Las tareas en esta columna no se han iniciado, pero ya se encuentran definidas y listas para ser iniciadas.
 + En progreso: El desarrollo de las tareas en esta columna ya se inició, pueden o no estar bloqueadas por alguna dependencia a otra tarea en progreso o por hacer.
