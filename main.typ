@@ -22,7 +22,7 @@
 )
 #show heading: smallcaps
 
-#let titleText = [Desarrollo de el _inflight-software_ para la OBC secundaria del Satélite Quetzal-2]
+#let titleText = [Desarrollo del _inflight software_ para la OBC secundaria del Satélite Quetzal-2]
 
 #set page(
   paper: "a4",
@@ -99,7 +99,7 @@
 
   // Fecha
   #text(size: 12pt, fill: luma(60))[
-    Guatemala, 15 de abril de 2026
+    Guatemala, junio de 2026
   ]
 ]
 
@@ -122,19 +122,19 @@
   )
   #par(justify: false)[
     *Resumen/Abstract* \
-    El Quetzal-2 es un nanosatélite CubeSat 2U desarrollado como proyecto académico por estudiantes y _staff_ UVG el cual pone a prueba una _On-Board Computer_ (OBC) diseñada localmente que ejecuta una inteligencia artificial capaz de identificar nubes. Este nanosatélite cuenta con una computadora a bordo compuesta de por dos unidades de procesamiento, una _of-the-shelf_ de GomSpace y otra desarrollada localmente utilizando Portentas H7 de Arduino.
-    Las OBC son sistemas vitales dentro de una misión espacial puesto que gestionan todos los subsistemas del satélite así como la comunicación entre estos. Este proyecto se centra en las bases de esta OBC local a nivel de _software_, sentando las bases para los distintos modos de operación que necesitará la misión, la toma de fotografías y la interoperabilidad entre las dos unidades de procesamiento que componen la OBC completa.
-    El impacto de esta OBC desarrollada localmente representa un gran punto de inicio para próximas misiones espaciales, bajando aún más la barrera económica de entrada para desarrollar misiones espaciales con respecto a soluciones _of-the-shelf_, puesto que demuestra que no es necesario el uso de hardware altamente costoso con muchas más protecciones para llevar a cabo una misión exitosa.
+    El Quetzal-2 es un nanosatélite CubeSat 2U desarrollado como proyecto académico por estudiantes y _staff_ de la Universidad del Valle de Guatemala el cual pone a prueba una _On-Board Computer_ (OBC) diseñada localmente que ejecuta una inteligencia artificial capaz de identificar nubes. Este nanosatélite cuenta con una computadora a bordo compuesta de por dos unidades de procesamiento, una _of-the-shelf_ de GomSpace y otra desarrollada localmente utilizando Portentas H7 de Arduino.
+    Las OBC son sistemas vitales dentro de una misión espacial puesto que gestionan todos los subsistemas del satélite así como la comunicación entre estos. Este proyecto se centra en las bases de esta OBC local a nivel de _software_, sentando las bases para los distintos modos de operación que necesita la misión, la toma de fotografías y la interoperabilidad entre las dos unidades de procesamiento que componen la OBC completa.
+    El impacto de esta OBC desarrollada localmente representa un gran punto de inicio para próximas misiones espaciales, bajando aún más la barrera económica de entrada para desarrollar misiones espaciales con respecto a soluciones _of-the-shelf_, puesto que demuestra que no es necesario el uso de _hardware_ altamente costoso con muchas más protecciones para llevar a cabo una misión exitosa.
   ]
 ]
 
 = Introducción
 
-El Quetzal-2 es un proyecto académico desarrollado por estudiantes y personal UVG la cual pone a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada en UVG capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Este proyecto es importante no solo porque representa un avance tecnológico en Guatemala, sino también por su impacto dentro de la juventud del país, inspirando a futuros científicos, ingenieros e innovadores @quetzal_1.
+El Quetzal-2 es un proyecto académico desarrollado por estudiantes y personal de la Universidad del Valle de Guatemala la cual pone a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada en UVG capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Este proyecto es importante no solo porque representa un avance tecnológico en Guatemala, sino también por su impacto dentro de la juventud del país, inspirando a futuros científicos, ingenieros e innovadores @quetzal_1.
 
 La misión espacial es un CubeSat 2U, 10x20x10cm y con un peso máximo de 4kg @johnstone_2022 y cuenta con 4 objetivos específicos que busca completar, llamadas cargas útiles (_Payloads_ en inglés). Para este proyecto nos interesa específicamente _Payload MILO_, el subsistema encargado del reconocimiento de nubosidad y la toma de fotografías en el espacio @quetzal_2.
 
-Las OBC cumplen un papel clave dentro de los subsistemas del satélite puesto que son las encargadas de manejar todas las tareas, intercambio de información entre módulos y la colecta de información sobre los demás subsistemas (_housekeeping_) antes de la conexión con la estación en tierra @lwabanji_wilkinson_biermann_bellville_2013.
+Las OBCs cumplen un papel clave dentro de los subsistemas del satélite puesto que son las encargadas de manejar todas las tareas, intercambio de información entre módulos y la colecta de información sobre los demás subsistemas (_housekeeping_) antes de la conexión con la estación en tierra @lwabanji_wilkinson_biermann_bellville_2013.
 
 Algunos de los subsistemas que debe manejar una OBC son:
 - Un sistema de poder (EPS por sus siglas en inglés).
@@ -144,47 +144,45 @@ Algunos de los subsistemas que debe manejar una OBC son:
 
 La inicialización, intercomunicación y gestión de todos estos subsistemas recae sobre la OBC @akhtar_2012. Debido a las altas limitaciones energéticas en satélites de esta escala se debe tener especial cuidado con el presupuesto de energía que se le puede brindar a cada uno de los subsistemas. De esta necesidad nacen los modos de operación, los cuáles restringen las funcionalidades del satélite según la tarea para la que se quiere que se especialice en ese momento.
 
-Este trabajo profesional busca desarrollar un sistema de _software_ para la OBC diseñada localmente (_in-house_) capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de handover con la computadora principal, validado en un entorno controlado terrestre. Para el desarrollo de este sistema se utilizará una metodología propia del laboratorio espacial UVG, basada en la metodología de ingeniería de sistemas de la NASA @nasa_systems_engineering.
-
-#pagebreak()
-= Antecedentes
-+ Investigacion preliminar.
+Este trabajo profesional busca desarrollar un sistema de _software_ para la OBC diseñada localmente (_in-house_) capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de _handover_ con la computadora principal, validado en un entorno controlado terrestre. Para el desarrollo de este sistema se utiliza una metodología propia del laboratorio espacial UVG, basada en la metodología de ingeniería de sistemas de la NASA @nasa_systems_engineering.
 
 #pagebreak()
 = Objetivos
 
-Desarrollar localmente las bases de un _inflight software_ para la OBC diseñada localmente del Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de handover con la OBC principal, validado en un entorno controlado terrestre.
-+ Integrar el módulo de cámara al sistema de _software_ de la computadora a bordo, logrando la captura y transmisión de al menos una secuencia de imágenes desde la carga útil MILO hacia la computadora a bordo desarrollada localmente, sin errores de comunicación en pruebas controladas. 
-+ Desarrollar el sistema base de gestión de modos de operación del _software_, implementando al menos tres modos (Arranque, Toma de fotografía y Nominal preliminar), validando transiciones correctas entre los modos de Toma de fotografía y Nominal preliminar sin pérdida de funcionalidad. 
-+ Desarrollar un Producto Mínimo Viable (MVP por sus siglas en inglés) del sistema de handover entre la OBC principal y la OBC diseñada localmente, que permita transferir y recuperar el control de la carga útil MILO mediante comandos definidos y verificados en pruebas de integración.
+Desarrollar localmente las bases de un _inflight software_ para la _On Board Computer_ (OBC) secundaria diseñada localmente del Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de _handover_ con la OBC principal, validado en un entorno controlado terrestre.
++ Integrar el módulo de cámara al sistema de _software_ de la computadora a bordo secundaria, logrando la captura y transmisión de imágenes desde la carga útil MILO hacia la computadora a bordo secundaria desarrollada localmente. 
++ Desarrollar el sistema base de gestión de modos de operación del _software_, implementando tres modos: Arranque, Toma de fotografía y Nominal preliminar.
++ Desarrollar un Producto Mínimo Viable (MVP) del sistema de _handover_ entre la OBC principal y la OBC secundaria diseñada localmente, que permita transferir y recuperar el control de la carga útil MILO.
 
 #pagebreak()
 = Justificación
 
-El proyecto espacial de Quetzal-2 tiene como misión principal probar una computadora a bordo (diseñada en UVG) que sea capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Al ser una misión académica y no un proyecto de gobierno o una multinacional como Tesla, los recursos económicos son relativamente limitados. Esto genera una necesidad de reducir costos en donde sea posible y por lo tanto, un _software_ diseñado _inhouse_ adaptado a las necesidad específicas de la misión pero con oportunidad de ser extendido a otras misiones futuras capaz de ejecutarse dentro de componentes más baratos suena muy atractivo, dando origen a este proyecto.
+La misión espacial Quetzal-2 al ser una misión académica y no un proyecto de gobierno o una multinacional como Tesla, cuenta con recursos económicos relativamente limitados. Esto genera una necesidad real de reducir costos en donde sea posible, por lo tanto, un _inflight software_ diseñado localmente, adaptado a las necesidades específicas de la misión pero reutilizable en misiones futuras y además es capaz de ejecutarse dentro de componentes más baratos suena muy atractivo, dando origen a este proyecto.
 
-Otra limitante dentro de estos sistemas es el bajo presupuesto de energía con el que se cuenta. En general, esto afecta la potencia de los microcontroladores que se pueden utilizar, pues se tiene que balancear disponibilidad del sistema y potencia @lwabanji_wilkinson_biermann_bellville_2013. Por lo tanto, esta clase de sistemas espaciales generalmente utilizan sistemas operativos en tiempo real (RTOS por sus siglas en inglés) debido a que ofrecen un mayor control sobre el orquestamiento de tareas permitiendo así (de forma indirecta) un mayor control sobre el uso de energía.
+En cuanto a las tecnologías a utilizar, las OBCs dependen en gran medida del microcontrolador seleccionado para su misión @bheema_rajulu_sankar_dasiga_iyer_2014. En el Quetzal-2 se utiliza una pareja de PortentasH7 Lite para la OBC secundaria, éstas cuentan con dos procesadores ARM diseñados por el proveedor STM32 @arduino_2026. Por lo tanto, nuestras opciones se encuentran limitadas por lo que este proveedor pueda ofrecer.
 
-Para este proyecto en específico se consideraron dos opciones de sistemas operativos a utilizar, ambos RTOS y _open source_: RODOS y FreeRTOS.
+Según la literatura actual, el uso de _Real Time Operating Systems_ (RTOS por sus siglas en inglés) representa una práctica común para escribir sistemas complejos en el mundo del _embedded software_, incluyendo en misiones espaciales como el STUDSAT-2 @bheema_rajulu_sankar_dasiga_iyer_2014. Para este proyecto se utiliza FreeRTOS debido a su soporte para PortentaH7 y su grande y activa comunidad de desarrolladores @freertos_2010.
 
-+ RODOS: Es un sistema operativo basado en el principio de cliente-servidor. Su principal fortaleza es un diseño sencillo y modular que permite su extensibilidad @rodos.
-+ FreeRTOS: Es un sistema operativo cuyos fuertes principales son su facilidad de uso y el alto soporte que tiene tanto en comunidad como en arquitecturas de procesador, en especial, que ya soporta la Portenta H7 @freertos_2010.
-Para este proyecto se utiliza FreeRTOS como sistema operativo base para el _inflight software_. Siendo el soporte para la PortentaH7 su principal ventaja respecto a RODOS.
+Debido a que FreeRTOS expone un API nativa en C para su desarrollo @freertos_2010 y a los bajos márgenes de presupuesto de energía con los que se cuenta en misiones de escalas similares a Quetzal-2 @lwabanji_wilkinson_biermann_bellville_2013, el lenguaje que se utiliza para el desarrollo del _inflight software_ es C.
 
 #pagebreak()
 = Metodología
 
-Se seguirá una metodología kanban de trabajo, con columnas que representan los estados:
+Para la documentación y organización de los módulos se utiliza una metodología propia del laboratorio pero que tiene sus bases en _Systems Engineering_, una metodología utilizada por la _National AeroSpace Agency_ (NASA por sus siglás en inglés) para sus proyectos @nasa_systems_engineering.
 
-+ Listos
-+ En progreso
-+ Completado
+Debido al reducido tamaño del equipo de desarrollo del _inflight software_ se decidió que la metodología a utilizar sería Kanban, a continuación se presentan los 3 posibles estados en los que se puede encontrar una tarea dentro de el _framework_:
 
-Además para la documentación y organización de los módulos se utilizará una metodología propia del laboratorio pero que tiene sus bases en _Systems Engineering_, una metodología utilizada por la _National AeroSpace Agency_ (NASA) para sus proyectos @nasa_systems_engineering.
++ Por hacer: Las tareas en esta columna no se han iniciado, pero ya se encuentran definidas y listas para ser iniciadas.
++ En progreso: El desarrollo de las tareas en esta columna ya se inició, pueden o no estar bloqueadas por alguna dependencia a otra tarea en progreso o por hacer.
++ Completado: Las tareas en esta columna ya han finalizado su desarrollo, esto incluye pruebas internas en el ambiente controlado terrestre.
 
-La modalidad será en su mayoría presencial debido a que para realizar pruebas se necesita hardware específico que se encuentra disponible solamente dentro del laboratorio aeroespacial UVG. Sin embargo, el desarrollo de _software_ tiene la gran ventaja que puede ser trabajado de forma remota también, por lo que ocasionalmente se tendrán sesiones asíncronas remotas de desarrollo.
+La modalidad de trabajo es en su mayoría presencial debido a que para realizar pruebas se necesita hardware específico que se encuentra disponible solamente dentro del laboratorio aeroespacial UVG. Sin embargo, el desarrollo de _software_ tiene la gran ventaja que puede ser trabajado de forma remota también, por lo que ocasionalmente se tendrán sesiones asíncronas remotas de desarrollo.
 
-Considero importante recalcar, que este proyecto, aunque busca desarrollar una base para el _inflight software_ que será utilizado dentro de la misión espacial UVG Quetzal-2, no realizará ningún desarrollo sobre la inteligencia artificial que se llevará a bordo ni tampoco busca generar un sistema operativo diseñado a la medida para la misión. El enfoque principal es el _inflight software_.
+A continuación se detallan las fases del proyecto y qué se busca completar en cada una de ellas:
+
++ Fase 1: Tiene como objetivo integrar la carga útil MILO con la OBC secundaria desarrollada localmente. Para lograr este objetivo se necesita establecer una comunicación básica entre ambos microcontroladores utilizando el protocolo definido por nuestro líder de módulo para luego tomar la fotografía y enviarla a las PortentasH7 Lite.
++ Fase 2: Esta fase busca implementar el sistema de gestión de modos de operación de la OBC secundaria desarrollada localmente. Por lo tanto, se necesita realizar un diseño de la arquitectura en general donde se considere definidión y cambio de modos de operación, además de un camino claro para realizar pruebas de esta implementación. Luego se procede con la implementación de los distintos modos de operación validando que la toma y envío de fotografía siga funcionando.
++ Fase 3: Esta fase tiene como objetivo principal implementar el MVP del _handover_ entre la OBC principal y la OBC secundaria. Para cumplir con este objetivo se necesita establecer una comunicación entre ambas OBCs utilizando el protocolo definido por nuestro líder de módulo e implementar los distintos comandos de toma y retiro de control de la OBC secundaria. Finalmente, se necesita evaluar el correcto funcionamiento de todo el sistema con pruebas de funcionamiento.
 
 #pagebreak()
 = Plan de Trabajo
@@ -221,7 +219,7 @@ Considero importante recalcar, que este proyecto, aunque busca desarrollar una b
     text-color: rgb("#fff"),
     bar-color: rgb("#6DD6DA"),
     tasks: (
-      ("Establecer comunicación entre OBC principal y OBC secundario",  (12, 13)),
+      ("Establecer comunicación entre OBC principal y OBC secundaria",  (12, 13)),
       ("Definición de comandos de comunicación",                        (13, 13)),
       ("Implementación del comando de toma de control",                 (14, 14)),
       ("Implementación del comando de retiro de control",               (14, 15)),
