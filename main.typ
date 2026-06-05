@@ -159,9 +159,9 @@ Desarrollar localmente las bases de un _inflight software_ para la _On Board Com
 
 La misión espacial Quetzal-2 al ser una misión académica y no un proyecto de gobierno o una multinacional como Tesla, cuenta con recursos económicos relativamente limitados. Esto genera una necesidad real de reducir costos en donde sea posible, por lo tanto, un _inflight software_ diseñado localmente, adaptado a las necesidades específicas de la misión pero reutilizable en misiones futuras y además es capaz de ejecutarse dentro de componentes más baratos suena muy atractivo, dando origen a este proyecto.
 
-En cuanto a las tecnologías a utilizar, las OBCs dependen en gran medida del microcontrolador seleccionado para su misión @bheema_rajulu_sankar_dasiga_iyer_2014. En el Quetzal-2 se utiliza una pareja de PortentasH7 Lite para la OBC secundaria, éstas cuentan con dos procesadores ARM diseñados por el proveedor STM32 @arduino_2026. Por lo tanto, nuestras opciones se encuentran limitadas por lo que este proveedor pueda ofrecer.
+En cuanto a las tecnologías a utilizar, las OBCs dependen en gran medida del microcontrolador seleccionado para su misión @bheema_rajulu_sankar_dasiga_iyer_2014. En el Quetzal-2 se utiliza una pareja de PortentasH7 Lite para la OBC secundaria, éstas cuentan con dos procesadores ARM diseñados por el proveedor STM32 @arduino_2026. Por lo tanto, nuestras opciones se encuentran limitadas a lo que este proveedor pueda ofrecer.
 
-Según la literatura actual, el uso de _Real Time Operating Systems_ (RTOS por sus siglas en inglés) representa una práctica común para escribir sistemas complejos en el mundo del _embedded software_, incluyendo en misiones espaciales como el STUDSAT-2 @bheema_rajulu_sankar_dasiga_iyer_2014. Para este proyecto se utiliza FreeRTOS debido a su soporte para PortentaH7 y su grande y activa comunidad de desarrolladores @freertos_2010.
+Según la literatura actual, el uso de _Real Time Operating Systems_ (RTOS por sus siglas en inglés) representa una práctica común para escribir sistemas complejos en el mundo del _embedded software_, incluyendo en misiones espaciales como el STUDSAT-2 @bheema_rajulu_sankar_dasiga_iyer_2014. Para este proyecto se utiliza FreeRTOS debido a su soporte para PortentaH7 y su comunidad de desarrolladores, la cual es grande y activa @freertos_2010.
 
 Debido a que FreeRTOS expone un API oficial en C para su desarrollo @freertos_2010 y a los bajos márgenes de presupuesto de energía con los que se cuenta en misiones de escalas similares a Quetzal-2 @lwabanji_wilkinson_biermann_bellville_2013, el lenguaje que se utiliza para el desarrollo del _inflight software_ es C.
 
@@ -170,7 +170,7 @@ Debido a que FreeRTOS expone un API oficial en C para su desarrollo @freertos_20
 
 Para la documentación y organización de los módulos se utiliza una metodología propia del laboratorio pero que tiene sus bases en _Systems Engineering_, una metodología utilizada por la _National AeroSpace Agency_ (NASA por sus siglás en inglés) para sus proyectos @nasa_systems_engineering.
 
-Debido al reducido tamaño del equipo de desarrollo del _inflight software_ se decidió que la metodología a utilizar sería Kanban, a continuación se presentan los 3 posibles estados en los que se puede encontrar una tarea dentro de el _framework_:
+Debido al reducido tamaño del equipo de desarrollo del _inflight software_ y a las prioridades cambiantes que puede tener el proyecto se utiliza la metodología Kanban, a continuación se presentan los 3 posibles estados en los que se puede encontrar una tarea dentro de esta metodología:
 
 + Por hacer: Las tareas en esta columna no se han iniciado, pero ya se encuentran definidas y listas para ser iniciadas.
 + En progreso: El desarrollo de las tareas en esta columna ya se inició, pueden o no estar bloqueadas por alguna dependencia a otra tarea en progreso o por hacer.
