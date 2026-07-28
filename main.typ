@@ -120,14 +120,15 @@
       #link("mailto:gal22386@uvg.edu.gt")
     ]
   )
-  #par(justify: false)[
-    *Resumen/Abstract* \
+  #par(justify: true)[
+    *Resumen* \
     El Quetzal-2 es un nanosatélite CubeSat 2U desarrollado como proyecto académico por estudiantes y _staff_ de la Universidad del Valle de Guatemala el cual pone a prueba una _On-Board Computer_ (OBC) diseñada localmente que ejecuta una inteligencia artificial capaz de identificar nubes. Este nanosatélite cuenta con una computadora a bordo compuesta de por dos unidades de procesamiento, una OBC principal basada en hardware comercial de GomSpace y otra OBC secundaria desarrollada localmente utilizando Portentas H7 de Arduino.
     Las OBC son sistemas vitales dentro de una misión espacial puesto que gestionan todos los subsistemas del satélite así como la comunicación entre estos. Este proyecto se centra en las bases de esta OBC local a nivel de _software_, sentando las bases para los distintos modos de operación que necesita la misión, la toma de fotografías y la interoperabilidad entre las dos unidades de procesamiento que componen la OBC completa.
     El impacto de esta OBC desarrollada localmente representa un gran punto de inicio para próximas misiones espaciales, bajando aún más la barrera económica de entrada para desarrollar misiones espaciales con respecto a soluciones _of-the-shelf_, puesto que demuestra que no es necesario el uso de _hardware_ altamente costoso con muchas más protecciones para llevar a cabo una misión exitosa.
   ]
 ]
 
+#pagebreak()
 = Introducción
 
 El Quetzal-2 es un proyecto académico desarrollado por estudiantes y personal de la Universidad del Valle de Guatemala la cual pone a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada en UVG capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales @quetzal_2. Este proyecto es importante no solo porque representa un avance tecnológico en Guatemala, sino también por su impacto dentro de la juventud del país, inspirando a futuros científicos, ingenieros e innovadores @quetzal_1.
@@ -149,8 +150,11 @@ Este trabajo profesional busca desarrollar un sistema de _software_ para la OBC 
 #pagebreak()
 = Objetivos
 
-Desarrollar localmente las bases de un _inflight software_ para la _On Board Computer_ (OBC) secundaria diseñada localmente del Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de _handover_ con la OBC principal, validado en un entorno controlado terrestre.
-+ Integrar el módulo de cámara al sistema de _software_ de la computadora a bordo secundaria, logrando la captura de la imagen y transmisión de informaciones relevantes de la imagen desde la carga útil MILO hacia la computadora a bordo secundaria desarrollada localmente. 
+Objetivo general:
+- Desarrollar localmente las bases de un _inflight software_ para la _On Board Computer_ (OBC) secundaria diseñada localmente para el Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de _handover_ con la OBC principal, validado en un entorno controlado terrestre.
+
+Objetivos específicos:
++ Integrar el módulo de cámara al sistema de _software_ de la OBC secundaria, logrando la captura de la imagen y transmisión de informaciones de la imagen desde la carga útil MILO hacia la OBC secundaria desarrollada localmente. 
 + Desarrollar el sistema base de gestión de modos de operación del _software_, implementando tres modos: Arranque, Toma de fotografía y Nominal preliminar.
 + Desarrollar un Producto Mínimo Viable (MVP) del sistema de _handover_ entre la OBC principal y la OBC secundaria diseñada localmente.
 
