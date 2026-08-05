@@ -70,7 +70,7 @@
 
 // Formato UVG clásico para capítulos y secciones (numeración romana en
 // capítulos, letras en secciones, etc.). Equivalente a \capsecuvg.
-#let formato-uvg-capitulos = false
+#let formato-uvg-capitulos = true
 
 // ==============================================================================
 // 2. PAQUETES Y COMANDOS DEL USUARIO
@@ -499,28 +499,54 @@
 // MARCO TEÓRICO
 // ------------------------------------------------------------------------------
 #if incluir-marco-teorico [
-  = Marco teórico
+  = Marco Teórico
 
-  // --- i-marco_teorico.tex ---
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vestibulum, nisl in semper semper, urna ex vehicula enim, eu luctus est velit a est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris et dui ipsum. Praesent tempus vestibulum augue eget venenatis. Curabitur sollicitudin erat vel leo finibus tincidunt. Nullam ullamcorper, risus eu varius venenatis, nibh ligula egestas ante, vel commodo ipsum ante ac enim. Sed iaculis pharetra magna. Duis sit amet augue vitae mi lobortis tristique. Suspendisse non euismod quam. Donec a tincidunt lacus. Aliquam metus quam, rutrum non libero vel, interdum molestie turpis.
+  // ```
+  // Flow:
+  // - Quetzal-2 y Quetzal-1
+  // - CubeSat
+  // - Subsistemas de un satélite
+  // - OBC
+  // - Comunicación RS485 e I2C
+  // - Handover Architecture
+  // - RTOS
+  // - Arquitecturas de Software
+  // - Testable Software
+  // - Best Practices
+  // ```
 
-  Maecenas enim ligula, placerat quis purus eu, pretium tempor justo. Pellentesque accumsan sem eget mattis scelerisque. Ut consectetur lorem dui, a efficitur lectus tincidunt id. Aliquam quis fermentum elit. Pellentesque facilisis semper sem, vitae ornare purus. Morbi ultricies, orci sit amet porta facilisis, ex justo varius elit, viverra euismod sapien enim vel justo. Sed felis mi, feugiat quis molestie ac, gravida sed nunc. Proin elementum, augue quis ultrices dictum, nisl magna pharetra magna, ut ullamcorper diam dolor in elit. In hac habitasse platea dictumst. Suspendisse hendrerit leo non ex ornare mattis. Fusce hendrerit imperdiet nisl in viverra. Proin non turpis ut sapien pulvinar aliquam eu aliquet turpis. Etiam commodo tellus nec ipsum sodales feugiat. Morbi vel pulvinar nibh, nec varius turpis.
+  El Quetzal-2 es el segundo proyecto aeroespacial de la Universidad del Valle de Guatemala, el cual es desarrollado por estudiantes y personal académico de la institución @quetzal_2.
 
-  Donec a libero vel lacus tincidunt dapibus. Nullam et leo volutpat dui feugiat volutpat vel lacinia ante. Donec finibus risus at facilisis gravida. Cras efficitur felis elementum purus finibus ultricies. Nunc sit amet diam egestas, blandit mauris nec, gravida nisi. In a arcu eu nunc mattis dictum sed placerat arcu. Morbi sit amet venenatis lectus, vitae lobortis nisl. Pellentesque id mattis magna, et convallis leo. Maecenas ultricies hendrerit quam vel ornare. Pellentesque fermentum aliquet velit quis malesuada. Proin commodo, est ultrices rhoncus scelerisque, massa nulla congue tellus, ut porta ante ante vitae nisl. In pharetra quam et urna dictum scelerisque. Aliquam in metus velit. Phasellus aliquet velit molestie, tincidunt purus vestibulum, aliquet odio. Sed augue odio, scelerisque non mi et, pulvinar bibendum justo. Vestibulum sed hendrerit urna.
+  Su predecesor, el Quetzal-1, fue el primer satélite guatemalteco, cuya misión buscaba probar un sensor multiespectral para adquirir información remota para conservar recursos naturales de forma independiente @quetzal_1. El trabajo realizado para Quetzal-1 representa las bases para el nuevo y mejorado Quetzal-2, el cual busca poner a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada localmente, capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales. Así como validará un subsistema para desorbitación responsable y permitirá transmitir datos satelitales en tiempo real a centros educativos del país @quetzal_2.
 
-  Donec a lacus quis mi volutpat mollis ac ut lorem. Nulla porta venenatis faucibus. Fusce metus lectus, ullamcorper vel risus laoreet, consequat faucibus sapien. Donec vitae ultrices mauris, dignissim sodales eros. Integer hendrerit elementum ipsum a vestibulum. Vivamus in pretium orci. Fusce condimentum, nibh tempor sagittis laoreet, dui erat luctus neque, a ultrices arcu mauris eget massa. Duis quis ante metus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+  Debido a la complejidad de la misión, Quetzal-2 es un CubeSat 2U, el doble de tamaño que su predecesor @quetzal_2. CubeSat es un estándar que inició en 1999, desarrollado por el profesor Jordi Puig-Sauri y Bob Twiggs. La intención de este estándar es reducir costos y tiempos de desarrollo, al mismo tiempo que incrementa la accesibilidad al espacio. Todos los satélites CubeSat adoptan un tamaño y peso medido en unidades ('U'), la medida que define el estándar. Un CubeSat de 1U (como el Quetzal-1 @quetzal_1) es un centímetro de 10cm de lado con una masa de hasta 2kg @cubesat_2022.
 
-  Vestibulum laoreet tortor enim, nec tristique turpis dapibus id. Nam quis erat ac nibh imperdiet placerat et a sapien. Aliquam sollicitudin, leo a aliquam vestibulum, lectus eros maximus justo, eu tincidunt justo ipsum non risus. Curabitur ultrices mi vitae elit venenatis, vel semper orci consequat. Nulla ac mauris vitae orci tincidunt mattis. Mauris risus justo, luctus non diam in, dapibus scelerisque eros. Donec fringilla risus sit amet sapien tempus viverra. Quisque quis justo ut enim gravida mollis in vulputate libero. Maecenas auctor accumsan turpis, id dapibus odio aliquet sit amet. Sed feugiat libero eget facilisis finibus. Sed vitae nulla nec felis porta convallis a in purus. Integer finibus efficitur lorem at aliquet. Etiam venenatis velit non tempus porttitor.
+  Esta clase de misiones espaciales se componen de varios subsistemas comunicándose entre sí para llevar a cabo el objetivo de la misión, de esta realidad surge la necesidad de una OBC, la cual se encarga de manejar y dirigir de forma autónoma estas comunicaciones, así como la interacción con la estación de control terrena (GCS por sus siglas en inglés) @lwabanji_wilkinson_biermann_bellville_2013.
 
-  Suspendisse tincidunt a orci sed vehicula. Aenean ac mauris enim. Duis vitae fringilla augue. Mauris fringilla neque ac nunc aliquet porta. Praesent quis elit convallis, vehicula leo a, tincidunt leo. Curabitur vitae ligula non leo faucibus cursus sit amet nec ex. Proin mollis lectus in odio aliquet, eu tristique lacus aliquet. Aliquam auctor eget lorem quis porttitor. Duis sagittis eros ac diam ornare, id auctor elit cursus. Morbi vel dolor et odio laoreet ornare. Cras sit amet pretium neque. Mauris vestibulum ante sit amet eros rutrum eleifend ac a sapien. Nullam vitae convallis eros. Proin blandit a nulla nec hendrerit. Fusce ultrices, nibh in mattis consequat, nisi libero rutrum lacus, vitae vulputate lorem tellus vitae enim.
+  Según Gildeh @gildeh_2003, un CubSat típico se compone de varios subsistemas, como mínimo:
+  - Sistema de poder (EPS por sus siglas en inglés), cargado por paneles solares.
+  - Una carga útil (comúnmente llamada _payload_), el/los objetivo(s) de la misión, generalmente una cámara o similar.
+  - Sistema de control y determinación de altura (ADCS por sus siglas en inglés).
+  - Sistema de comunicación por radiofrecuencia.
+  - Una OBC que permite la comunicación entre todos estos subsistemas.
 
-  Quisque feugiat felis diam. Maecenas elementum, neque ut ornare tristique, nulla sem semper diam, vel imperdiet purus arcu sit amet magna. Nullam tempus eleifend ultrices. Maecenas pharetra ac leo eget mattis. Donec suscipit arcu justo, ac finibus diam scelerisque sit amet. Nulla et porta urna. Donec vel ultrices lectus. Quisque id molestie tellus. Vivamus vitae elit sit amet ipsum tincidunt sodales eget eget tortor. Quisque vitae placerat ipsum. Donec malesuada ipsum a consectetur venenatis.
+  En el caso de Quetzal-2, la OBC realmente se divide en 2, una principal y una secundaria. La OBC principal, es la misma que se utilizó en Quetzal-1, la Gomspace Nanomind A3200 @ayerdi_2023, esta computadora fue especialmente diseñada para misiones espaciales, como sensores integrados para control de altitud y protecciones especiales contra radiación @gomspace_2026.
 
-  Morbi pretium velit eu egestas vulputate. Curabitur vitae nulla porttitor, feugiat nisl eu, congue erat. Morbi id dapibus risus. Curabitur mattis massa ut faucibus fringilla. Sed non mauris felis. Curabitur mattis congue blandit. Pellentesque consectetur vehicula laoreet. Maecenas malesuada libero at dui viverra feugiat. Nullam luctus erat eu massa molestie molestie. Etiam mattis leo ut eleifend vehicula. Vivamus finibus convallis nulla eget finibus. Integer leo quam, rutrum in ultricies sed, accumsan eget enim. Sed sit amet turpis at mi aliquet tempor id sed felis.
+  La OBC secundaria, la cual es diseñada localmente, está compuesta por una pareja de Portentas H7 Lite, ambas cuentan con dos cores de procesamiento y 8MB de SDRAM @arduino_2026. La OBC secundaria, al igual que la primaria, necesita gestionar la comunicación entre los distintos subsistemas, por lo que se le considera el cerebro del satélite @lwabanji_wilkinson_biermann_bellville_2013 y según @stras2003design necesita cumplir con las siguientes tareas:
+  - Grabar y guardar la telemetría del satélite, incluyendo la data de las _payloads_ y su transmisión hacia la GCS.
+  - Cifrado y descifrado de los paquetes de datos enviados y recibidos de la GCS.
+  - Monitoreo y gestión de subsistemas, incluso reiniciando los que sean necesarios.
 
-  Ut egestas dui eget luctus convallis. Duis ut mauris sed mi consequat iaculis vitae porta neque. Sed ipsum dolor, malesuada ut posuere vel, varius vehicula elit. Duis arcu mi, maximus a purus ut, ultricies egestas urna. Nam mollis tempor risus, quis rutrum felis viverra at. Donec eros quam, malesuada vel tortor eu, dapibus faucibus risus. Phasellus vestibulum diam sit amet sem mattis, et commodo ante volutpat. Quisque aliquet tellus in ultrices ornare. Aenean ut sem sed enim elementum cursus.
+  Generalmente, la OBC no se encarga de el manejo de energía, en su lugar un subsistema por aparte (el EPS) se encarga de apagar y reinciar sistemas dentro del satélite. Aunque sí hay casos en donde tal tarea se le atribuye a la OBC @hidayat_2010.
 
-  Fusce ultricies odio non lorem cursus, in porttitor diam egestas. Mauris vel dui suscipit, pretium ligula vestibulum, tempus ipsum. Proin hendrerit ligula at massa porta rutrum non a ante. Aliquam quis nisl a ex feugiat interdum ultricies ac eros. Nullam eget rhoncus est. Ut sed velit sed nunc consectetur rhoncus condimentum condimentum mi. Donec ut imperdiet erat. Suspendisse tempor vel lorem non placerat. Nulla quis molestie lorem, et laoreet velit. Phasellus pretium quam non turpis rutrum, vitae mollis ex blandit. Nulla a erat nulla. Aenean vitae blandit diam. Morbi magna lectus, facilisis ac consectetur eget, cursus ut ipsum. Nulla maximus purus velit, vel posuere tortor consectetur a. Vestibulum cursus malesuada urna ac laoreet.
+  Existen varias interfaces seriales de comunicación que se pueden utilizar para la intercomunicación de microcontroladores, muchas aunque desarrolladas para una aplicación en específico se han vuelto universales, RS485 e I2C caen en esta categoría @hung2020flexible. Dentro del Quetzal-2 se utilizan estos dos protocolos para la comunicación interna entre sus subsistemas, RS485 es especialmente popular debido a que permite conectar múltiples puntos de control utilizando un bus serial, además de ser un protocolo de comunicación probado en producción por años lo que lo hace una opción segura cuanto menos @sastry2015building. Mientras que I2C facilita la comunicación entre microcontroladores utilizando un modelo de maestro esclavo, en donde solo el maestro puede iniciar la comunicación @carletti2007comunicacion.
+
+  Dentro de Quetzal-2, los protocolos se utilizan para los siguientes propósitos:
+  - RS485: Comunica la OBC primaria y secundaria con el resto de subsistemas del satélite, es decir: _Payload_ MILO, _ADCS_, _ADM_, etc.
+  - I2C: Se reserva únicamente para la comunicación entre la OBC primaria y la OBC secundaria, siendo la OBC primaria la maestra y la OBC secundaria la esclava. Esta decisión es clave para el funcionamiento de la arquitectura de _handover_.
+
+  La arquitectura de _handover_ es un sistema interno de la OBC primaria, diseñado localmente, cuyo objetivo principal es trasladar el control del satélite de sí misma a la OBC secundaria de una forma segura y redundante a fallos. Quetzal-2 no es la única misión que ha integrado más de una OBC en su sistema de mando, SHEFEX III, una misión alemana del 2017 también usó dos OBCs para redundancia, sin embargo su estrategia nunca fue ceder control de una OBC a la otra sino tener un backup en caso alguna de la dos fallara @schwarz2014fault. Otro ejemplo es la arquitectura DHS propuesta en 2023 para misiones académicas como profesionales @soucaille2023high. Esta arquitectura en específico también se usó en el mismo año para otra misión espacial, la misión HERA, de la misma forma su principal objetivo era redundancia total, pero además buscaba autonomía operacional y alta capacidad de almacenamiento a bordo @Marcos_Valverde_Carretero_2023.
+
 ]
 
 // ------------------------------------------------------------------------------
@@ -576,14 +602,15 @@ Aquí seguimos escribiendo texto normalmente.
 // BIBLIOGRAFÍA
 // ------------------------------------------------------------------------------
 #if incluir-bibliografia [
-  #heading(level: 1, numbering: none)[Bibliografía]
+  // #heading(level: 1, numbering: none)[Bibliografía]
+  #bibliography(("./ref.bib", "./ref.yml"))
 
   // --- m-bibliografia.bib, estilo IEEE ---
-  #for (i, entrada) in bibliografia-entradas.enumerate() [
-    #block(spacing: 0.8em)[
-      \[#(i + 1)\] #entrada.texto
-    ]
-  ]
+  // #for (i, entrada) in bibliografia-entradas.enumerate() [
+  //   #block(spacing: 0.8em)[
+  //     \[#(i + 1)\] #entrada.texto
+  //   ]
+  // ]
 ]
 
 // ------------------------------------------------------------------------------
