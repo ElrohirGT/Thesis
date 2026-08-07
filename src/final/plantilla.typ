@@ -547,6 +547,16 @@
 
   La arquitectura de _handover_ es un sistema interno de la OBC primaria, diseñado localmente, cuyo objetivo principal es trasladar el control del satélite de sí misma a la OBC secundaria de una forma segura y redundante a fallos. Quetzal-2 no es la única misión que ha integrado más de una OBC en su sistema de mando, SHEFEX III, una misión alemana del 2017 también usó dos OBCs para redundancia, sin embargo su estrategia nunca fue ceder control de una OBC a la otra sino tener un backup en caso alguna de la dos fallara @schwarz2014fault. Otro ejemplo es la arquitectura DHS propuesta en 2023 para misiones académicas como profesionales @soucaille2023high. Esta arquitectura en específico también se usó en el mismo año para otra misión espacial, la misión HERA, de la misma forma su principal objetivo era redundancia total, pero además buscaba autonomía operacional y alta capacidad de almacenamiento a bordo @Marcos_Valverde_Carretero_2023.
 
+  En Quetzal-2, esta arquitectura funciona de la siguiente manera:
+
+  La OBC diseñada localmente es desarrollada en un lenguaje a bajo nivel, particularmente C, debido a que es el lenguaje principal en el que el _driver_ a bajo nivel de STM32 es proveído, ofreciendo un mayor control sobre el uso de los recursos, casi tan granular como querramos @stmicroelectronics_2026. Debido a la complejidad del sistema interno que debe manejar la OBC para gestionar la comunicación entre todos los subsistemas del satélite, se necesita un sistema operativo @lwabanji_wilkinson_biermann_bellville_2013.
+
+  Existen muchos tipos de sistemas operativos (OS por sus siglas en inglés), según su infraestructura interna podemos tener sistemas operativos monolíticos, por capas, microkernels, módulos o híbridos siendo alguna combinación entre ellos @operating_system_concepts_2018. Para propósitos del Quetzal-2, resulta de mayor importancia cómo el OS calendariza sus tareas que el cómo se compone internamente el sistema operativo como tal, ya que las misiones espaciales tienden a tener presupuestos muy ajustados tanto de memoria como procesamiento @lwabanji_wilkinson_biermann_bellville_2013. 
+
+  Los sistemas operativos en tiempo real (RTOS por sus siglas en inglés) fueron creados justamente para los casos en donde se tienen requerimientos de tiempo rígidos @operating_system_concepts_2018 y por esta razón se evaluaron distintas alternativas de implementación de un RTOS. RODOS, un sistema operativo de código abierto desarrollado por Sergio Montenegro, con un énfasis en facilidad de uso, rendimiento y probado en aplicaciones espaciales reales @rodos; FreeRTOS, otro sistema operativo de código abierto, con una gran comunidad, excelente rendimiento y años de uso en producción @freertos_2010. Luego de unas pruebas de _porting_ de RODOS a STM32H7, la arquitectura de la Portenta H7 Lite, se decidió a utilizar FreeRTOS por su alta compatibilidad con este _hardware_.
+
+  La arquitectura de software busca gestionar la comunicaciónn entre los componentes de software que conformarn un sistema @pareja2019arquitectura. 
+
 ]
 
 // ------------------------------------------------------------------------------
