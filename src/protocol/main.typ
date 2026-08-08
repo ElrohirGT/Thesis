@@ -151,7 +151,6 @@ Este trabajo profesional busca desarrollar un sistema de _software_ para la OBC 
 = Objetivos
 
 Objetivo general:
-- Desarrollar localmente las bases de un _inflight software_ para la _On Board Computer_ (OBC) secundaria diseñada localmente para el Quetzal-2, capaz de operar la carga útil MILO, gestionar modos de operación y ejecutar un mecanismo de _handover_ con la OBC principal, validado en un entorno controlado terrestre.
 
 Objetivos específicos:
 + Integrar el módulo de cámara al sistema de _software_ de la OBC secundaria, logrando la captura de la imagen y transmisión de informaciones de la imagen desde la carga útil MILO hacia la OBC secundaria desarrollada localmente. 
