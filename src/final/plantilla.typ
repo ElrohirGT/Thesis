@@ -519,6 +519,9 @@
   // - Arquitecturas de Software
   // - Testable Software
   // - Best Practices
+  // - Ambiente de Desarrollo de Software
+  //   - Editores de Código
+  //   - Linux
   // ```
 
   El Quetzal-2 es el segundo proyecto aeroespacial de la Universidad del Valle de Guatemala, el cual es desarrollado por estudiantes y personal académico de la institución @quetzal_2.
@@ -586,36 +589,65 @@
 
 ]
 
+= Metodología
+
+== Ambiente de Desarrollo
+
+Para el desarrollo de las bases del software de vuelo de la OBC secundaria del Quetzal-2 se utilizó el sistema operativo libre #link("https://www.linux.org/pages/download/")[Linux]. La _distro_ específica que se utilizó es irrelevante, pero si necesitas una recomendación, considero que Ubuntu Linux es una muy buena opción para principiantes.
+
++ Un editor de código. Yo utilicé #link("https://neovim.io/")[Neovim] (versión 0.12.4), pero perfectamente se puede usar #link("https://zed.dev/")[Zed], #link("https://code.visualstudio.com/")[VSCode] o similares.
++ Instalar el manejador de paquetes #link("https://nixos.org/")[Nix] (versión 2.34.8).
++ Habilitar #link("https://nixos.wiki/wiki/flakes")[Nix Flakes].
++ Por último, si necesitas cambiar los valores de configuración por defecto de la portenta, vas a necesitar el STM32CubeIDE. Lo puedes obtener #link("https://www.st.com/en/development-tools/stm32cubeide")[aquí] (versión 2.2.0).
+
+Copia y pega el archivo `flake.nix` del repositorio del proyecto (se encuentra en @source_code). Este archivo especifica todas las dependencias necesarias para compilar y quemar el proyecto en la memoria del microcontrolador. 
+
+Para instalar estas dependencias utilizando Nix, se debe abrir una terminal y ejecutar el siguiente comando dentro de la misma carpeta en la que está el `flake.nix`:
+```bash
+nix develop
+```
+Este comando creará una sesión con los paquetes necesarios para compilar el proyecto. Siempre ejecuta este comando antes de cualquier otro comando una vez antes de cualquier otro comando de compilación. Una lista incompleta de las dependencias que instalará es:
+
+- gcc
+- make
+- bear
+- clang
+- Entre otras, el listado completo lo puedes encontrar dentro del archivo `flake.nix`.
+
+Los pasos para compilar el proyecto desde 0 se pueden encontrar en detalle en el README del repositorio (@source_code).
+
+== Configuración del Hardware
+
 // ------------------------------------------------------------------------------
 // CAPÍTULOS
 // ------------------------------------------------------------------------------
 // --- j-capitulos.tex ---
 
-= Derivación de la dinámica del mecanismo
-
-== Dinámica de cuerpos rígidos
-
-== Restricciones
-=== Mecanismos de lazo cerrado
-==== Mecanismo de cuatro barras
-
-= Control del sistema mecánico
-
-== La ecuación del manipulador
-
-#figure(
-  table(
-    columns: 5,
-    stroke: 0.5pt,
-    [12], [$3.2$], [$3.43$], [23], [13],
-    [aasdasdd], [asd], [ssdssa], [ssdas], [asdasda],
-    [], [], [], [], [],
-    [], [], [], [], [],
-  ),
-  caption: [Tabla de prueba. Esta es una breve descripción de la tabla anterior. Continuamos con la descripción de esta forma y se menciona que fue de elaboración propia.],
-) <cuadro-tablaprueba>
-
-Aquí seguimos escribiendo texto normalmente.
+// = Derivación de la dinámica del mecanismo
+//
+// == Dinámica de cuerpos rígidos
+//
+// == Restricciones
+// === Mecanismos de lazo cerrado
+// ==== Mecanismo de cuatro barras
+//
+// = Control del sistema mecánico
+//
+// == La ecuación del manipulador
+//
+// #figure(
+//   table(
+//     columns: 5,
+//     stroke: 0.5pt,
+//     [12], [$3.2$], [$3.43$], [23], [13],
+//     [aasdasdd], [asd], [ssdssa], [ssdas], [asdasda],
+//     [], [], [], [], [],
+//     [], [], [], [], [],
+//   ),
+//   caption: [Tabla de prueba. Esta es una breve descripción de la tabla anterior. Continuamos con la descripción de esta forma y se menciona que fue de elaboración propia.],
+// ) <cuadro-tablaprueba>
+//
+// Aquí seguimos escribiendo texto normalmente.
 
 // ------------------------------------------------------------------------------
 // CONCLUSIONES
@@ -656,8 +688,9 @@ Aquí seguimos escribiendo texto normalmente.
 #if incluir-anexos [
   = Anexos
 
-  // --- n-anexos.tex ---
-  == Planos de construcción
+  == Repositorio de Código <source_code>
+
+  #link("https://github.com/QTZ-2-OBC/FreeRTOS-PortentaH7")[El repositorio es público y se encuentra hosteado en github, da click aquí.]
 ]
 
 // ------------------------------------------------------------------------------
