@@ -1,3 +1,5 @@
+#import "@preview/merman:0.2.0": mermaid-figure
+
 // ==============================================================================
 //  PLANTILLA PARA TRABAJOS DE GRADUACIÓN IE-MT — VERSIÓN TYPST
 //  Traducción de la plantilla LaTeX original de Miguel Zea (UVG) a Typst,
@@ -600,7 +602,7 @@ Para el desarrollo de las bases del software de vuelo de la OBC secundaria del Q
 + Habilitar #link("https://nixos.wiki/wiki/flakes")[Nix Flakes].
 + Por último, si necesitas cambiar los valores de configuración por defecto de la portenta, vas a necesitar el STM32CubeIDE. Lo puedes obtener #link("https://www.st.com/en/development-tools/stm32cubeide")[aquí] (versión 2.2.0).
 
-Copia y pega el archivo `flake.nix` del repositorio del proyecto (se encuentra en @source_code). Este archivo especifica todas las dependencias necesarias para compilar y quemar el proyecto en la memoria del microcontrolador. 
+Copia y pega el archivo `flake.nix` del repositorio del proyecto (se encuentra en la @source_code). Este archivo especifica todas las dependencias necesarias para compilar y quemar el proyecto en la memoria del microcontrolador. 
 
 Para instalar estas dependencias utilizando Nix, se debe abrir una terminal y ejecutar el siguiente comando dentro de la misma carpeta en la que está el `flake.nix`:
 ```bash
@@ -617,6 +619,196 @@ Este comando creará una sesión con los paquetes necesarios para compilar el pr
 Los pasos para compilar el proyecto desde 0 se pueden encontrar en detalle en el README del repositorio (@source_code).
 
 == Configuración del Hardware
+
+La OBC secundaria se encuentra compuesta por 2 _PortentasH7 Lite_. Ambas se configuraron utilizando el STM32H7CubeIDE para autogenerar el código de configuración. Específicamente, la OBC secundaria utiliza 2 tipos de comunicación serial: I2C y UART. Se configuraron de la siguiente manera:
+
+=== I2C
+
+Para la comunicación serial por I2C. La OBC secundaria es la esclava. Se utiliza el puerto I2C1 con la siguiente configuración:
+```c
+I2C_HandleTypeDef hi2c1;
+
+void MX_I2C1_Init(void) {
+
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.Timing = 0x10C0ECFF;
+  hi2c1.Init.OwnAddress1 = (0x09 << 1); 
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK) {
+    Error_Handler();
+  }
+  /** Configure Analogue filter
+   */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK) {
+    Error_Handler();
+  }
+  /** Configure Digital filter
+   */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK) {
+    Error_Handler();
+  }
+}
+```
+
+=== UART
+
+Para la comunicación utilizando RS485, se utiliza un puerto en específico de UART: El UART4. Se inicializa de la siguiente manera:
+```c
+void MX_UART4_Init(void) {
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart4.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart4.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart4.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart4) != HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart4, UART_TXFIFO_THRESHOLD_1_8) !=
+      HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart4, UART_RXFIFO_THRESHOLD_1_8) !=
+      HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart4) != HAL_OK) {
+    Error_Handler();
+  }
+}
+```
+
+La OBC secundaria también utiliza un puerto UART para enviar _logs_ con información adicional que aumentan la observabilidad detrás de qué está pasando internamente dentro del sistema, los cuales se pueden leer leyendo el puerto UART6, configurado de la siguiente manera:
+```c
+void MX_USART6_UART_Init(void) {
+  huart6.Instance = USART6;
+  huart6.Init.BaudRate = 115200;
+  huart6.Init.WordLength = UART_WORDLENGTH_8B;
+  huart6.Init.StopBits = UART_STOPBITS_1;
+  huart6.Init.Parity = UART_PARITY_NONE;
+  huart6.Init.Mode = UART_MODE_TX_RX;
+  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart6.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart6.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart6.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart6) != HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart6, UART_TXFIFO_THRESHOLD_1_8) !=
+      HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart6, UART_RXFIFO_THRESHOLD_1_8) !=
+      HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart6) != HAL_OK) {
+    Error_Handler();
+  }
+}
+```
+
+== OBC Secundaria Quetzal-2
+
+La OBC secundaria se diseñó a nivel de _software_ para cumplir los siguientes objetivos, en orden de prioridad:
+
++ Fiabilidad
++ Seguridad
++ Rendimiento
+
+La OBC secundaria se implementó como una máquina de estados finitos determinista, de esta forma podemos predecir no solo el rendimiento de memoria de la computadora secundaria, sino también su comportamiento. Algunos de los estados de la máquina finita se pueden apreciar en la @finite_state_machine.
+
+#mermaid-figure("
+flowchart LR
+    GOM[fa:fa-microchip OBC Principal]-->|Inicia el Handover|Arr
+
+    subgraph fa:fa-microchip OBC Secundaria
+    Arr(fa:fa-diagram-project Arranque de Handover)-->|Inicialización de módulos|Nom(fa:fa-diagram-project Nominal)
+    Nom-->|Comando: Toma de fotografía|MILO(fa:fa-diagram-project Payload MILO)
+    MILO-->|Resultado de la fotografía|Nom
+
+    Nom-->|Comando: Comunicación LORA|LORA(fa:fa-diagram-project Payload LORA)
+    LORA-->|Fin del timeout|Nom
+
+    Nom-->|Comando: ...|OTH(fa:fa-diagram-project Otros subsistemas...)
+    OTH-->|Fin tarea|Nom
+
+    end
+    Nom-->|Fin Handover|GOM
+
+    %% Legend
+  subgraph legend
+    direction LR
+    Y --- |Microchip| Z
+    Z --- |Estado| null
+  end
+  linkStyle 9,10 stroke:#0000,stroke-width:0px;
+
+  classDef hide fill:#0000,stroke:#0000,stroke-width:0px,color:#0000;
+  class legend,null hide;
+  classDef hide-font color:#0000;
+  class Y,Z hide-font;
+
+  class Arr,Nom,MILO,LORA,OTH,Z state
+  class GOM,Y microchip
+
+  classDef microchip fill:lime
+  classDef state fill:yellow
+",
+caption: [Máquina de Estados Finitos (incompleta) de la OBC secundaria del Quetzal-2. Elaboración propia.],
+alt: "Máquina de Estados Finitos (incompleta) de la OBC secundaria del Quetzal-2. Elaboración propia.",
+) <finite_state_machine>
+
+Para mejorar el determinismo de esta máquina de estados, todas las taeas que necesitan comunicación con un sistema externo al _core_ de la OBC secundaria, por ejemplo interactuar con subsistemas, se realizaron por medio de interfaces. De esta forma se tiene una arquitectura como la descrita en la @hexagonal_arch.
+
+#mermaid-figure("
+flowchart LR
+  core(Core OBC)-->rs485(Interfaz RS485)-->milo(Subsistema MILO)
+  rs485-->adcs(Subsistema ADCS)
+  rs485-->adm(Subsistema ADCS)
+
+  core-->i2c(Interfaz I2C)-->gom(OBC Principal)
+
+  core-->uart(Interfaz UART)-->debug(Debug logs)
+
+    %% Legend
+  subgraph legend
+    direction LR
+    Y --- |Interfaz Intermediaria| Z
+    Z --- |Subsistema Interno| null
+  end
+  linkStyle 8,9 stroke:#0000,stroke-width:0px;
+
+  classDef hide fill:#0000,stroke:#0000,stroke-width:0px,color:#0000;
+  class legend,null hide;
+  classDef hide-font color:#0000;
+  class Y,Z hide-font;
+
+  class milo,adcs,adm,gom,debug,Z subsystem
+  class rs485,i2c,uart,Y interface
+
+  classDef interface fill:lime
+  classDef subsystem fill:yellow
+",
+caption: [Arquitectura de la OBC secundaria. Elaboración propia.],
+alt: "Arquitectura de la OBC secundaria. Elaboración propia.",
+) <hexagonal_arch>
+
+Esta arquitectura de la @hexagonal_arch nos permitió varias bondades:
+- Nos permitió intercambiar todos los subsistemas (en amarillo) por implementaciones que funcionen o fallen de formas predecibles.
+- Se logró simular entradas y salidas de los distintos subsistemas a voluntad sin necesidad de conectar físicamente todo el sistema o que siquiera se encuentre desarrollado.
+- Se automatizaron las pruebas de comportamiento de la OBC ante una gran variedad de entradas de los distintos submódulos.
 
 // ------------------------------------------------------------------------------
 // CAPÍTULOS
