@@ -600,6 +600,7 @@ Para el desarrollo de las bases del _software_ de vuelo de la computadora a bord
 + Un editor de código. 
 + El manejador de paquetes #link("https://nixos.org/")[Nix] (versión 2.34.8) con #link("https://nixos.wiki/wiki/flakes")[Nix Flakes] habilitados.
 + El #link("https://www.st.com/en/development-tools/stm32cubeide")[STM32CubeIDE] (versión 2.2.0), para generar la configuración del hardware.
++ #link("https://openmv.io/pages/download")[OpenMV IDE], para interactuar con payload MILO.
 
 El archivo `flake.nix` del repositorio (se encuentra en la @source_code) lista todas las dependencias que el proyecto necesita a detalle, sin embargo, una lista con las principales es la siguiente:
 
@@ -660,7 +661,7 @@ La comunicación UART se utiliza para la comunicación entre la OBC y los demás
 #figure(
   image("./images/OBCUART.png", width: 60%),
   caption: [Comunicación UART entre OBC y módulos del satélite.]
-) <i2c_comms>
+) <uart_comms>
 
 Para la comunicación utilizando RS485, se utiliza un puerto en específico de UART: El UART4. Se inicializa de la siguiente manera:
 ```c
@@ -815,6 +816,42 @@ Esta arquitectura de la @hexagonal_arch nos permitió varias bondades:
 - Se logró simular entradas y salidas de los distintos subsistemas a voluntad sin necesidad de conectar físicamente todo el sistema o que siquiera se encuentre desarrollado.
 - Se automatizaron las pruebas de comportamiento de la OBC ante una gran variedad de entradas de los distintos submódulos.
 
+= Resultados
+
+#figure(
+  image("./images/HandoverTest.jpeg"),
+  caption: [Prueba del protocolo de handover corriendo localmente dentro de una misma computadora.]
+) <laptop_test>
+
+#figure(
+  image("./images/HandoverLowQuality.jpeg", width: 60%),
+  caption: [Prueba del protocolo de handover corriendo con hardware real entre la computadora primaria y secundaria. Logs desde la perspectiva de la OBC secundaria.]
+) <handover_test>
+
+#figure(
+  image("./images/RFReception.jpeg", width: 60%),
+  caption: [Logs de la prueba de handover desde la perspectiva de la A3200 (la imagen es placeholder no logré conseguir la correcta Gabriel jaja)]
+) <command_reception>
+
+#figure(
+  image("./images/milo.jpeg", width: 60%),
+  caption: [Fotografía tomada con la _Payload MILO_ durante la prueba de handover.]
+) <milo_picture>
+
+= Discusión de Resultados
+
+Como se puede apreciar en la @laptop_test, se realiza el camino sin errores de una rutina de handover completa, desde que la OBC primaria solicita el traslado de poder, pasando por el inicio de la tarea de MILO en donde se toma la fotografía y finalizando con el comando de abortar de la OBC primaria.
+
+Toda esa rutina se ejecutó dentro de un ambiente simulado en la computadora, y cada una de las respuestas y acciones que decidía tomar la OBC secundaria fue analizada por la prueba, solamente retornando éxito si todos los comandos recibidos y enviados seguían la especificación del protocolo interno. Es decir, la prueba revisó que luego de recibir el comando `BEGIN_HANDOVER` desde la computadora principal, la OBC secundaria respondiera con `BEGIN_HANDOVER_ACK`.
+
+Nótese el cambio de estados dentro de la OBC secundaria que se puede apreciar en los logs, iniciando en `IDLE` para transicionar a `HANDOVER_IDLE` y finalmente a `IDLE` de nuevo. Estos son los estados principales de la OBC secundaria, mientras que el estado interno de la tarea es `MILO_UNSTARTED`. La combinación de estos dos estados (`IDLE`, `MILO_UNSTARTED`) representan el modo de operación de arranque dentro del Producto Mínimo Viable (MVP por sus siglas en inglés) de la OBC secundaria. Para luego transicionar al estado nominal (`HANDOVER_IDLE`, `MILO_UNSTARTED`), para finalmente llegar al estado de toma de fotografía (`HANDOVER_IDLE`, `MILO_BEGIN`).
+
+Esta es la prueba principal que se implementó, pero gracias a la arquitectura hexagonal se tiene la posibilidad de implementar muchas más que prueben casos más extraños, o simplemente probar casos de error que nos permita asegurar que la OBC fallará de una manera predecible cuando se cumplan ciertas condiciones. Incluso se puede configurar un _fuzz tester_ para que la misma computadora en donde se corren las pruebas genere casos aleatorios intentando encontrar un error.
+
+El que la prueba mostrada en la @laptop_test tenga un resultado satisfactorio no significa que la computadora funcione, puesto que es un ambiente simulado dentro de la misma computadora. Por esto se realizaron pruebas con implementaciones reales de las interfaces, las cuales se pueden ver en la @handover_test y la @command_reception. En esta prueba se intentó solamente la comunicación entre los dos módulos de la OBC, primaria y secundaria. Como se puede ver en los logs, la comunicación fue satisfactoria y se logró llegar al último comando de aborto del protocolo de handover.
+
+Finalmente, en la @milo_picture se puede apreciar la fotografía de una prueba final con todos los subsistemas conectados utilizando las implementaciones reales de las interfaces de comunicación. La imagen se encuentra borrosa debido a la configuración de la cámara, ya que se tenía en baja calidad para limitar la cantidad de espacio que cada fotografía consumía al ser almacenada y transmitida dentro del sistema. Para ese punto de las pruebas lo importante no era la calidad de las fotografías sino que el sistema pudiera tomarla de forma autónoma.
+
 // ------------------------------------------------------------------------------
 // CAPÍTULOS
 // ------------------------------------------------------------------------------
@@ -852,6 +889,9 @@ Esta arquitectura de la @hexagonal_arch nos permitió varias bondades:
 #if incluir-conclusiones [
   = Conclusiones
 
+  + Se integró el módulo de cámara el sistema de _software_ de la computadora a bordo (OBC por sus siglas en inglés) secundaria, tomando una fotografía que se puede apreciar en la @milo_picture.
+  + Se desarrolló un sistema de gestión de modos de operación que permite: Arranque, Nominal preliminar y Toma de fotografía (@laptop_test).
+  + Se desarrolló un producto mínimo viable del sistema de _handover_ entre las dos OBCs del satélite (@command_reception).
   // --- k-conclusiones.tex (vacío en el original) ---
 ]
 
