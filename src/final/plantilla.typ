@@ -548,7 +548,12 @@
   - Cifrado y descifrado de los paquetes de datos enviados y recibidos de la GCS.
   - Monitoreo y gestión de subsistemas, incluso reiniciando los que sean necesarios.
 
-  Generalmente, la OBC no se encarga de el manejo de energía, en su lugar un subsistema por aparte (el EPS) se encarga de apagar y reinciar sistemas dentro del satélite. Aunque sí hay casos en donde tal tarea se le atribuye a la OBC @hidayat_2010.
+  Generalmente, la OBC no se encarga de el manejo de energía, en su lugar un subsistema por aparte (el EPS) se encarga de apagar y reinciar sistemas dentro del satélite. Aunque sí hay casos en donde tal tarea se le atribuye a la OBC @hidayat_2010. La @obc_components muestra cómo se organizan los componentes de la OBC de Quetzal-2 así como la forma de comunicación con otros submódulos:
+
+  #figure(
+    image("./images/OBC_Diagram.png"),
+    caption: [Diagrama de componentes de la OBC y sus protocolos de comunicación.]
+  ) <obc_components>
 
   Existen varias interfaces seriales de comunicación que se pueden utilizar para la intercomunicación de microcontroladores, muchas aunque desarrolladas para una aplicación en específico se han vuelto universales, RS485 e I2C caen en esta categoría @hung2020flexible. Dentro del Quetzal-2 se utilizan estos dos protocolos para la comunicación interna entre sus subsistemas, RS485 es especialmente popular debido a que permite conectar múltiples puntos de control utilizando un bus serial, además de ser un protocolo de comunicación probado en producción por años lo que lo hace una opción segura cuanto menos @sastry2015building. Mientras que I2C facilita la comunicación entre microcontroladores utilizando un modelo de maestro esclavo, en donde solo el maestro puede iniciar la comunicación @carletti2007comunicacion.
 
@@ -556,9 +561,16 @@
   - RS485: Comunica la OBC primaria y secundaria con el resto de subsistemas del satélite, es decir: _Payload_ MILO, _ADCS_, _ADM_, etc.
   - I2C: Se reserva únicamente para la comunicación entre la OBC primaria y la OBC secundaria, siendo la OBC primaria la maestra y la OBC secundaria la esclava. Esta decisión es clave para el funcionamiento de la arquitectura de _handover_.
 
-  La arquitectura de _handover_ es un sistema interno de la OBC primaria, diseñado localmente, cuyo objetivo principal es trasladar el control del satélite de sí misma a la OBC secundaria de una forma segura y redundante a fallos. Quetzal-2 no es la única misión que ha integrado más de una OBC en su sistema de mando, SHEFEX III, una misión alemana del 2017 también usó dos OBCs para redundancia, sin embargo su estrategia nunca fue ceder control de una OBC a la otra sino tener un backup en caso alguna de la dos fallara @schwarz2014fault. Otro ejemplo es la arquitectura DHS propuesta en 2023 para misiones académicas como profesionales @soucaille2023high. Esta arquitectura en específico también se usó en el mismo año para otra misión espacial, la misión HERA, de la misma forma su principal objetivo era redundancia total, pero además buscaba autonomía operacional y alta capacidad de almacenamiento a bordo @Marcos_Valverde_Carretero_2023.
+  El protocolo de _handover_ es un sistema interno de la OBC primaria, diseñado localmente, cuyo objetivo principal es trasladar el control del satélite de sí misma a la OBC secundaria de una forma segura y redundante a fallos. Quetzal-2 no es la única misión que ha integrado más de una OBC en su sistema de mando, SHEFEX III, una misión alemana del 2017 también usó dos OBCs para redundancia, sin embargo su estrategia nunca fue ceder control de una OBC a la otra sino tener un backup en caso alguna de la dos fallara @schwarz2014fault. Otro ejemplo es la arquitectura DHS propuesta en 2023 para misiones académicas como profesionales @soucaille2023high. Esta arquitectura en específico también se usó en el mismo año para otra misión espacial, la misión HERA, de la misma forma su principal objetivo era redundancia total, pero además buscaba autonomía operacional y alta capacidad de almacenamiento a bordo @Marcos_Valverde_Carretero_2023.
 
-  En Quetzal-2, esta arquitectura funciona de la siguiente manera:
+  Una descripción general del protocolo se puede ver en la @handover_sequence. En donde se tiene a los 3 actores principales: A3200 representando la computadora principal, Portenta H7, representando la portenta que está activa en ese momento y SAMD, representando a el módulo que se necesita para una tarea, por ejemplo MILO.
+
+  #figure(
+    image("./images/OBC_Routines.png"),
+    caption: [Diagrama de secuencia del protocolo de _handover_ para un caso general.]
+  ) <handover_sequence>
+
+  En caso de fallos, el comando de `Handover abort` se enviará de forma automática por la OBC principal, además de que se tendrá un timer que permitirá la toma de control de parte de la OBC primaria en caso la secundaria deje de responder.
 
   La OBC diseñada localmente es desarrollada en un lenguaje a bajo nivel, particularmente C, debido a que es el lenguaje principal en el que el _driver_ a bajo nivel de STM32 es proveído, ofreciendo un mayor control sobre el uso de los recursos, casi tan granular como querramos @stmicroelectronics_2026. Debido a la complejidad del sistema interno que debe manejar la OBC para gestionar la comunicación entre todos los subsistemas del satélite, se necesita un sistema operativo @lwabanji_wilkinson_biermann_bellville_2013.
 
@@ -566,26 +578,24 @@
 
   Los sistemas operativos en tiempo real (RTOS por sus siglas en inglés) fueron creados justamente para los casos en donde se tienen requerimientos de tiempo rígidos @operating_system_concepts_2018 y por esta razón se evaluaron distintas alternativas de implementación de un RTOS. RODOS, un sistema operativo de código abierto desarrollado por Sergio Montenegro, con un énfasis en facilidad de uso, rendimiento y probado en aplicaciones espaciales reales @rodos; FreeRTOS, otro sistema operativo de código abierto, con una gran comunidad, excelente rendimiento y años de uso en producción @freertos_2010. Luego de unas pruebas de _porting_ de RODOS a STM32H7, la arquitectura de la Portenta H7 Lite, se decidió a utilizar FreeRTOS por su alta compatibilidad con este _hardware_.
 
-  La arquitectura de software busca gestionar la comunicaciónn entre los componentes de software que conformarn un sistema @pareja2019arquitectura. En este caso, sistema se referiría a la OBC diseñada localmente. Al ser una misión espacial, el acceso que tendremos al satélite es muy limitado, no podremos realizar parches de actualización de código por ejemplo. Por lo que tener la mayor garantía que podamos de que el sistema funciona y es resiliente a fallos es la prioridad más alta.
+  La arquitectura de software busca gestionar la comunicaciónn entre los componentes de software que conforman un sistema @pareja2019arquitectura. En este caso, sistema se referiría a la OBC diseñada localmente. Al ser una misión espacial, el acceso que tendremos al satélite es muy limitado, no podremos realizar parches de actualización de código por ejemplo. Por lo que tener la mayor garantía que podamos de que el sistema funciona y es resiliente a fallos es la prioridad más alta.
 
   La _National Aeronautics and Space Administration_ (NASA) es famosa por sus 10 reglas para desarrollar código crítico seguro:
 
-  + No usar recursión, saltos ni _goto statements_.
-  + Todos los ciclos deben tener un límite superior fijo. 
-  + No alojar memoria dinámica luego de la inicialización.
-  + No más de 60 líneas de código por función.
-  + Cada función debe tener un promedio de dos _assertions_.
-  + Declara todos los objetos de tipo data en el tamaño mínimo posible de _scope_.
-  + Todos los parámetros de retorno deben ser revisados por la función que los llamó. Todas las funciones deben revisar la validez de los parámetros proveídos.
-  + El uso del preprocesador de C debe estar limitado a inclusión de _header files_ y definiciones sencillas.
-  + Solamente es permitido un nivel de referencia con punteros.
-  + Todo el código debe ser compilado desde el primer día de desarrollo con todas las alertas del compilador en la configuración más pedante. El código debe compilar sin advertencias.
-
-  Todas son importantes, pero esta última en especial aplica aunque la herramienta dé un falso positivo. Si esto sucede, el código debe ser reescrito para facilitar su análisis estático @holzmann_2006.
+  + *No usar recursión, saltos ni _goto statements_*. La justificación de la NASA es debido a que simplificar el flujo de ejecución de nuestro programa generalmente se traduce a mejor claridad del código, así como en una mejora considerable de análisis estático.
+  + *Todos los ciclos deben tener un límite superior fijo*. Sin recursión, y con ciclos que siguen un límite fijo de iteraciones se previene en su totalidad rutinas que se ejecutan de forma indefinida. Esta regla no aplica para rutinas que deben ser forzosamente de terminación indeterminada, como la espera de nuevos comandos de la estación terrena (GCS por sus siglas en inglés).
+  + *No alojar memoria dinámica luego de la inicialización*. La alojación de memoria dinámica impacta negativamente en el rendimiento del sistema, además de que tiene un comportamiento notablemente difícil de predecir con análisis estático. Esta regla fuerza al programador a usar memoria estática alojada al declarar variables en el stack, si se combina con las reglas anteriores el código termina siendo legible y sencillo, lo que es excelente para analizadores estáticos que buscan probar que un programa se comportará como esperamos.
+  + *No más de 60 líneas de código por función*. Funciones extremadamente largas son una señal de código pobremente arquitecturizado.
+  + *Cada función debe tener un promedio de dos _assertions_*. La NASA recomienda utilizar aserciones en el código para probar condiciones de ejecución tanto antes como después de correr una función. Una aserción siempre revisa una condición, y detiene el programa en caso de que la condición no se cumpla, son especialmente útiles si se combinan con pruebas unitarias.
+  + *Declara todos los objetos de tipo data en el tamaño mínimo posible de _scope_*. Esta regla simplifica la depuración del código cuando ocurre una falla, puesto que es obvio que una variable que no se encuentra en el scope del código que falla no tiene ninguna relación con el error en sí. Por lo tanto queremos minimizar la cantidad de variables dentro del scope de cada rutina, limitando así, los lugares en donde se puede corromper estado y afectar en la ejecución de nuestro programa.
+  + *Todos los parámetros de retorno deben ser revisados por la función que los llamó*. *Todas las funciones deben revisar la validez de los parámetros proveídos*. Las interfaces con las que interactuamos los programadores están plagadas de funciones que puede que funcionen como esperamos o no, generalmente tienen una forma de reportar un error. Si una función debe ejecutarse solamente cuando el valor de retorno de otra función es exitoso, entonces es indispensable que este valor de retorno se revise, ese es el corazón de esta regla.
+  + *El uso del preprocesador de C debe estar limitado a inclusión de _header files_ y definiciones sencillas*. El preprocesador de C puede fácilmente ofuscar el código y confundir a analizadores estáticos, por lo que la NASA no recomienda su uso más allá de inclusiones sencillas.
+  + *Solamente es permitido un nivel de referencia con punteros*. Según la NASA, los punteros son fácilmente usados de forma incorrecta, incluso por programadores experimentados, pueden hacer que seguir el flujo de control de un programa sea complicado y reestringen las capacidades que tienen los analizadores de código estático.
+  + *Todo el código debe ser compilado desde el primer día de desarrollo con todas las alertas del compilador en la configuración más pedante. El código debe compilar sin advertencias*. Según la NASA, no hay ninguna excusa por la que una _warning_ debería ser ignorada, incluyendo los falsos positivos. El código debe ser reescrito para facilitar su análisis estático y no confundir a la herramienta @holzmann_2006.
 
   El espacio no es el único sector dentro del mundo del _software_ que necesita una resiliencia extraordinaria. Las bases de datos, son piezas de _software_ que deben funcionar incluso si el disco se corrompe, como es el caso de TigerBeetle @greef_2026. U otra base de datos venerada por su resiliencia a lo largo de los años, SQLite, con más de 1 billón de instancias en uso actualmente @software_should_work_2026.
 
-  Aunque hechas para casos de uso muy distintos, ambas llegaron a la misma conclusión, la forma de garantizar resiliencia a fallos, incluso en ambientes hostiles, es utilizar el poder de la misma computadora para revisar tu código. No hablan de IA, sino de _fuzz testing_, _unit testing_ y otra gran variedad de _xxx testing_. No basta solo el análisis estático, hay que poder garantizar de forma automatizada que la solución funciona y es resiliente a fallos, no porque el _linter_ no encuentre errores, sino porque luego de años de simulación que ocurren en horas o días en tiempo real lo respaldan @software_should_work_2026 @greef_2026.
+  Aunque hechas para casos de uso muy distintos, ambas llegaron a la misma conclusión, la forma de garantizar resiliencia a fallos, incluso en ambientes hostiles, es utilizar el poder de la misma computadora para revisar tu código. No hablan de IA, sino de _fuzz testing_, _unit testing_ y otra gran variedad de _xxx testing_. No basta solo el análisis estático, hay que poder garantizar de forma automatizada que la solución funciona y es resiliente a fallos, no porque el _linter_ no encuentre errores, sino porque años de simulación que ocurren en horas o días en tiempo real lo respaldan @software_should_work_2026 @greef_2026.
 
   (me gustaría expandir mucho más en las reglas de la NASA y en estos dos casos de _software_ resiliente pero me quedé sin tiempo para seguir escribiendo perdón Gabriel :"v)
 
@@ -825,12 +835,12 @@ Esta arquitectura de la @hexagonal_arch nos permitió varias bondades:
 
 #figure(
   image("./images/HandoverLowQuality.jpeg", width: 60%),
-  caption: [Prueba del protocolo de handover corriendo con hardware real entre la computadora primaria y secundaria. Logs desde la perspectiva de la OBC secundaria.]
+  caption: [Prueba del protocolo de handover corriendo con hardware real entre la computadora primaria y secundaria. _Logs_ desde la perspectiva de la OBC secundaria.]
 ) <handover_test>
 
 #figure(
   image("./images/RFReception.jpeg", width: 60%),
-  caption: [Logs de la prueba de handover desde la perspectiva de la A3200 (la imagen es placeholder no logré conseguir la correcta Gabriel jaja)]
+  caption: [_Logs_ de la prueba de handover desde la perspectiva de la A3200 (la imagen es placeholder no logré conseguir la correcta Gabriel jaja)]
 ) <command_reception>
 
 #figure(
@@ -844,16 +854,16 @@ Como se puede apreciar en la @laptop_test, se realiza el camino sin errores de u
 
 Toda esa rutina se ejecutó dentro de un ambiente simulado en la computadora, y cada una de las respuestas y acciones que decidía tomar la OBC secundaria fue analizada por la prueba, solamente retornando éxito si todos los comandos recibidos y enviados seguían la especificación del protocolo interno. Es decir, la prueba revisó que luego de recibir el comando `BEGIN_HANDOVER` desde la computadora principal, la OBC secundaria respondiera con `BEGIN_HANDOVER_ACK`.
 
-Nótese el cambio de estados dentro de la OBC secundaria que se puede apreciar en los logs, iniciando en `IDLE` para transicionar a `HANDOVER_IDLE` y finalmente a `IDLE` de nuevo. Estos son los estados principales de la OBC secundaria, mientras que el estado interno de la tarea es `MILO_UNSTARTED`. La combinación de estos dos estados (`IDLE`, `MILO_UNSTARTED`) representan el modo de operación de arranque dentro del Producto Mínimo Viable (MVP por sus siglas en inglés) de la OBC secundaria. Para luego transicionar al estado nominal (`HANDOVER_IDLE`, `MILO_UNSTARTED`), para finalmente llegar al estado de toma de fotografía (`HANDOVER_IDLE`, `MILO_BEGIN`). La @obc_states muestra en forma de diagrama estas transiciones:
+Nótese el cambio de estados dentro de la OBC secundaria que se puede apreciar en los _logs_, iniciando en `IDLE` para transicionar a `HANDOVER_IDLE` y finalmente a `IDLE` de nuevo. Estos son los estados principales de la OBC secundaria, mientras que el estado interno de la tarea es `MILO_UNSTARTED`. La combinación de estos dos estados (`IDLE`, `MILO_UNSTARTED`) representan el modo de operación de arranque dentro del Producto Mínimo Viable (MVP por sus siglas en inglés) de la OBC secundaria. Para luego transicionar al estado nominal (`HANDOVER_IDLE`, `MILO_UNSTARTED`), para finalmente llegar al estado de toma de fotografía (`HANDOVER_IDLE`, `MILO_BEGIN`). La @obc_states muestra en forma de diagrama estas transiciones:
 
 #figure(
   image("./images/OBC_States.png", width: 80%),
   caption: [Estados de la OBC secundaria de estados finitos.]
 ) <obc_states>
 
-Esta es la prueba principal que se implementó, pero gracias a la arquitectura hexagonal se tiene la posibilidad de implementar muchas más que prueben casos más extraños, o simplemente probar casos de error que nos permita asegurar que la OBC fallará de una manera predecible cuando se cumplan ciertas condiciones. Incluso se puede configurar un _fuzz tester_ para que la misma computadora en donde se corren las pruebas genere casos aleatorios intentando encontrar un error.
+Esta es la prueba principal que se implementó, pero gracias a la arquitectura hexagonal se tiene la posibilidad de implementar muchas más que prueben casos más extraños, o simplemente probar casos de error que permitan asegurar que la OBC fallará de una manera predecible cuando se cumplan ciertas condiciones.
 
-El que la prueba mostrada en la @laptop_test tenga un resultado satisfactorio no significa que la computadora funcione, puesto que es un ambiente simulado dentro de la misma computadora. Por esto se realizaron pruebas con implementaciones reales de las interfaces, las cuales se pueden ver en la @handover_test y la @command_reception. En esta prueba se intentó solamente la comunicación entre los dos módulos de la OBC, primaria y secundaria. Como se puede ver en los logs, la comunicación fue satisfactoria y se logró llegar al último comando de aborto del protocolo de handover.
+El que la prueba mostrada en la @laptop_test tenga un resultado satisfactorio no significa que la OBC secundaria funcione, puesto que es un ambiente simulado dentro de la misma computadora. Por esto se realizaron pruebas con implementaciones reales de las interfaces, las cuales se pueden ver en la @handover_test y la @command_reception. En esta prueba se intentó solamente la comunicación entre los dos módulos de la OBC, primaria y secundaria. Como se puede ver en los _logs_, la comunicación fue satisfactoria y se logró llegar al último comando de aborto del protocolo de handover.
 
 Finalmente, en la @milo_picture se puede apreciar la fotografía de una prueba final con todos los subsistemas conectados utilizando las implementaciones reales de las interfaces de comunicación. La imagen se encuentra borrosa debido a la configuración de la cámara, ya que se tenía en baja calidad para limitar la cantidad de espacio que cada fotografía consumía al ser almacenada y transmitida dentro del sistema. Para ese punto de las pruebas lo importante no era la calidad de las fotografías sino que el sistema pudiera tomarla de forma autónoma.
 
