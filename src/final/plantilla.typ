@@ -595,26 +595,17 @@
 
 == Ambiente de Desarrollo
 
-Para el desarrollo de las bases del software de vuelo de la OBC secundaria del Quetzal-2 se utilizó el sistema operativo libre #link("https://www.linux.org/pages/download/")[Linux]. La _distro_ específica que se utilizó es irrelevante, pero si necesitas una recomendación, considero que Ubuntu Linux es una muy buena opción para principiantes.
+Para el desarrollo de las bases del _software_ de vuelo de la computadora a bordo (OBC por sus siglas en inglés) secundaria del Quetzal-2 se utilizó el sistema operativo libre #link("https://www.linux.org/pages/download/")[Linux]. Además se necesita:
 
-+ Un editor de código. Yo utilicé #link("https://neovim.io/")[Neovim] (versión 0.12.4), pero perfectamente se puede usar #link("https://zed.dev/")[Zed], #link("https://code.visualstudio.com/")[VSCode] o similares.
-+ Instalar el manejador de paquetes #link("https://nixos.org/")[Nix] (versión 2.34.8).
-+ Habilitar #link("https://nixos.wiki/wiki/flakes")[Nix Flakes].
-+ Por último, si necesitas cambiar los valores de configuración por defecto de la portenta, vas a necesitar el STM32CubeIDE. Lo puedes obtener #link("https://www.st.com/en/development-tools/stm32cubeide")[aquí] (versión 2.2.0).
++ Un editor de código. 
++ El manejador de paquetes #link("https://nixos.org/")[Nix] (versión 2.34.8) con #link("https://nixos.wiki/wiki/flakes")[Nix Flakes] habilitados.
++ El #link("https://www.st.com/en/development-tools/stm32cubeide")[STM32CubeIDE] (versión 2.2.0), para generar la configuración del hardware.
 
-Copia y pega el archivo `flake.nix` del repositorio del proyecto (se encuentra en la @source_code). Este archivo especifica todas las dependencias necesarias para compilar y quemar el proyecto en la memoria del microcontrolador. 
+El archivo `flake.nix` del repositorio (se encuentra en la @source_code) lista todas las dependencias que el proyecto necesita a detalle, sin embargo, una lista con las principales es la siguiente:
 
-Para instalar estas dependencias utilizando Nix, se debe abrir una terminal y ejecutar el siguiente comando dentro de la misma carpeta en la que está el `flake.nix`:
-```bash
-nix develop
-```
-Este comando creará una sesión con los paquetes necesarios para compilar el proyecto. Siempre ejecuta este comando antes de cualquier otro comando una vez antes de cualquier otro comando de compilación. Una lista incompleta de las dependencias que instalará es:
-
-- gcc
-- make
-- bear
-- clang
-- Entre otras, el listado completo lo puedes encontrar dentro del archivo `flake.nix`.
+- gcc v15.2.0
+- make v4.4.1
+- bear v4.0.3
 
 Los pasos para compilar el proyecto desde 0 se pueden encontrar en detalle en el README del repositorio (@source_code).
 
@@ -624,7 +615,14 @@ La OBC secundaria se encuentra compuesta por 2 _PortentasH7 Lite_. Ambas se conf
 
 === I2C
 
-Para la comunicación serial por I2C. La OBC secundaria es la esclava. Se utiliza el puerto I2C1 con la siguiente configuración:
+La OBC utiliza la comunicación I2C únicamente entre la computadora primaria y la secundaria diseñada localmente:
+
+#figure(
+  image("./images/InternalOBC.png", width: 60%),
+  caption: [Comunicación I2C entre computadora primaria y secundaria.]
+) <i2c_comms>
+
+Para esta comunicación se utiliza el puerto I2C1 con la siguiente configuración:
 ```c
 I2C_HandleTypeDef hi2c1;
 
@@ -656,6 +654,13 @@ void MX_I2C1_Init(void) {
 ```
 
 === UART
+
+La comunicación UART se utiliza para la comunicación entre la OBC y los demás módulos del satélite, por ejemplo con ADCS, MILO, etc.
+
+#figure(
+  image("./images/OBCUART.png", width: 60%),
+  caption: [Comunicación UART entre OBC y módulos del satélite.]
+) <i2c_comms>
 
 Para la comunicación utilizando RS485, se utiliza un puerto en específico de UART: El UART4. Se inicializa de la siguiente manera:
 ```c
