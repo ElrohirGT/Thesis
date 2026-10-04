@@ -844,7 +844,12 @@ Como se puede apreciar en la @laptop_test, se realiza el camino sin errores de u
 
 Toda esa rutina se ejecutó dentro de un ambiente simulado en la computadora, y cada una de las respuestas y acciones que decidía tomar la OBC secundaria fue analizada por la prueba, solamente retornando éxito si todos los comandos recibidos y enviados seguían la especificación del protocolo interno. Es decir, la prueba revisó que luego de recibir el comando `BEGIN_HANDOVER` desde la computadora principal, la OBC secundaria respondiera con `BEGIN_HANDOVER_ACK`.
 
-Nótese el cambio de estados dentro de la OBC secundaria que se puede apreciar en los logs, iniciando en `IDLE` para transicionar a `HANDOVER_IDLE` y finalmente a `IDLE` de nuevo. Estos son los estados principales de la OBC secundaria, mientras que el estado interno de la tarea es `MILO_UNSTARTED`. La combinación de estos dos estados (`IDLE`, `MILO_UNSTARTED`) representan el modo de operación de arranque dentro del Producto Mínimo Viable (MVP por sus siglas en inglés) de la OBC secundaria. Para luego transicionar al estado nominal (`HANDOVER_IDLE`, `MILO_UNSTARTED`), para finalmente llegar al estado de toma de fotografía (`HANDOVER_IDLE`, `MILO_BEGIN`).
+Nótese el cambio de estados dentro de la OBC secundaria que se puede apreciar en los logs, iniciando en `IDLE` para transicionar a `HANDOVER_IDLE` y finalmente a `IDLE` de nuevo. Estos son los estados principales de la OBC secundaria, mientras que el estado interno de la tarea es `MILO_UNSTARTED`. La combinación de estos dos estados (`IDLE`, `MILO_UNSTARTED`) representan el modo de operación de arranque dentro del Producto Mínimo Viable (MVP por sus siglas en inglés) de la OBC secundaria. Para luego transicionar al estado nominal (`HANDOVER_IDLE`, `MILO_UNSTARTED`), para finalmente llegar al estado de toma de fotografía (`HANDOVER_IDLE`, `MILO_BEGIN`). La @obc_states muestra en forma de diagrama estas transiciones:
+
+#figure(
+  image("./images/OBC_States.png", width: 80%),
+  caption: [Estados de la OBC secundaria de estados finitos.]
+) <obc_states>
 
 Esta es la prueba principal que se implementó, pero gracias a la arquitectura hexagonal se tiene la posibilidad de implementar muchas más que prueben casos más extraños, o simplemente probar casos de error que nos permita asegurar que la OBC fallará de una manera predecible cuando se cumplan ciertas condiciones. Incluso se puede configurar un _fuzz tester_ para que la misma computadora en donde se corren las pruebas genere casos aleatorios intentando encontrar un error.
 
