@@ -527,9 +527,20 @@
   // ```
 
   == Quetzal 1 y 2
-  El Quetzal-2 es el segundo proyecto aeroespacial de la Universidad del Valle de Guatemala, el cual es desarrollado por estudiantes y personal académico de la institución @quetzal_2.
 
-  Su predecesor, el Quetzal-1, fue el primer satélite guatemalteco, cuya misión buscaba probar un sensor multiespectral para adquirir información remota para conservar recursos naturales de forma independiente @quetzal_1. El trabajo realizado para Quetzal-1 representa las bases para el nuevo y mejorado Quetzal-2, el cual busca poner a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada localmente, capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales. Así como validará un subsistema para desorbitación responsable y permitirá transmitir datos satelitales en tiempo real a centros educativos del país @quetzal_2.
+  #figure(
+    image("./images/Quetzal-2.png"),
+    caption: [Prototipo conceptual de Quetzal-2. Fuente: Universidad del Valle de Guatemala.]
+  ) <prototype_quetzal2>
+
+  El Quetzal-2 (@prototype_quetzal2) es el segundo proyecto aeroespacial de la Universidad del Valle de Guatemala, el cual es desarrollado por estudiantes y personal académico de la institución @quetzal_2.
+
+  Su predecesor, el Quetzal-1 (@cubesat_quetzal1), fue el primer satélite guatemalteco, cuya misión buscaba probar un sensor multiespectral para adquirir información remota para conservar recursos naturales de forma independiente @quetzal_1. El trabajo realizado para Quetzal-1 representa las bases para el nuevo y mejorado Quetzal-2, el cual busca poner a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada localmente, capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales. Así como validará un subsistema para desorbitación responsable y permitirá transmitir datos satelitales en tiempo real a centros educativos del país @quetzal_2.
+
+  #figure(
+    image("./images/Quetzal-1.jpg", width: 40%),
+    caption: [_CubeSat_ Quetzal 1. Fuente: Universidad del Valle de Guatemala.]
+  ) <cubesat_quetzal1>
 
   Debido a la complejidad de la misión, Quetzal-2 es un CubeSat 2U, el doble de tamaño que su predecesor @quetzal_2. CubeSat es un estándar que inició en 1999, desarrollado por el profesor Jordi Puig-Sauri y Bob Twiggs. La intención de este estándar es reducir costos y tiempos de desarrollo, al mismo tiempo que incrementa la accesibilidad al espacio. Todos los satélites CubeSat adoptan un tamaño y peso medido en unidades ('U'), la medida que define el estándar. Un CubeSat de 1U (como el Quetzal-1 @quetzal_1) es un centímetro de 10cm de lado con una masa de hasta 2kg @cubesat_2022.
 
@@ -563,8 +574,54 @@
   Existen varias interfaces seriales de comunicación que se pueden utilizar para la intercomunicación de microcontroladores, muchas aunque desarrolladas para una aplicación en específico se han vuelto universales, RS485 e I2C caen en esta categoría @hung2020flexible. Dentro del Quetzal-2 se utilizan estos dos protocolos para la comunicación interna entre sus subsistemas, RS485 es especialmente popular debido a que permite conectar múltiples puntos de control utilizando un bus serial, además de ser un protocolo de comunicación probado en producción por años lo que lo hace una opción segura cuanto menos @sastry2015building. Mientras que I2C facilita la comunicación entre microcontroladores utilizando un modelo de maestro esclavo, en donde solo el maestro puede iniciar la comunicación @carletti2007comunicacion.
 
   Dentro de Quetzal-2, los protocolos se utilizan para los siguientes propósitos:
-  - RS485: Comunica la OBC primaria y secundaria con el resto de subsistemas del satélite, es decir: _Payload_ MILO, _ADCS_, _ADM_, etc.
+  - RS485: Comunica la OBC primaria y secundaria con el resto de subsistemas del satélite, es decir: _Payload_ MILO, _ADCS_, _ADM_, etc. Se utiliza el protocolo de _hardware_ UART para su implementación.
   - I2C: Se reserva únicamente para la comunicación entre la OBC primaria y la OBC secundaria, siendo la OBC primaria la maestra y la OBC secundaria la esclava. Esta decisión es clave para el funcionamiento de la arquitectura de _handover_.
+
+  === UART
+
+  El protocolo _Universal Asynchronous Receiver-Transmitter_ (UART) es uno de los protocolos de hardware más usados para comunicación entre dispositivos. El protocolo necesita de dos pines: uno para recibir información, llamado comúnmente `RX` y otro para enviar información, llamado `TX`. Ambos se conectan de forma cruzada entre los dispositivos para lograr así la recepción y comunicación de datos en ambos dispositivos @pena2020uart, como se ve en la @uart_pins.
+
+  #figure(
+    image("./images/UART_Pins.png"),
+    caption: [Diagrama de conexión de pines entre dos dispositivos que soportan el protocolo de comunicación UART.]
+  ) <uart_pins>
+
+  === RS485
+
+  El protocolo RS485 se basa en el protocolo RS422, su principal ventaja con respecto a RS422 es que permite la conexión de hasta 32 dispositivos (tanto transmisores como receptores) mientras que RS422 solamente admite 10 receptores y un transmisor. RS485 hereda de RS422 su alta resistencia al ruido, ya que utiliza una corriente diferencial entre dos cables para transmitir la señal, cuya conexión se ve en la @rs485_pins. Lo que significa que un byte que se transmite no es un pulso de corriente dentro de un solo cable, sino una diferencia de corriente entre ambas líneas de conexión del protocolo, el @rs485_truth_table muestra una tabla de verdad con la entrada y cómo se transmite por los cables. Al protocolo solamente le interesa la diferencia entre ambas líneas, por lo que mientras pueda interpretar a una línea como 0 y a otra como 1 seguirá funcionando, lo que lo hace altamente resiliente a ruido @sonnenberg2018serial.
+
+  #figure(
+    image("./images/RS485_Pins.png"),
+    caption: [Diagrama de conexión de pines entre dos dispositivos que soportan el protocolo de comunicación UART.]
+  ) <rs485_pins>
+
+  #figure(
+    table(
+      columns: (auto, auto, auto, auto),
+      align: horizon,
+      table.header(
+        [*Entrada*],[*A*],[*B*],[*Salida*],
+      ),
+      [0],[1],[0],[0],
+      [1],[0],[1],[1],
+    ),
+    caption: [Tabla de verdad del protocolo RS485.]
+  ) <rs485_truth_table>
+
+  === I2C
+
+  Al igual que RS485, I2C es un protocolo de comunicación serial entre dispositivos, la transmisión de datos es serial y sincrónica, lo que implica el paso de un pulso de reloj para sincronizar la salida y entrada de los datos entre los dispositivos. Requiere de dos líneas de conexión @carletti2007comunicacion:
+
+  + SDA (_System Data_): Se utiliza para transmitir los datos entre los dispositivos.
+  + SCL (_System Clock_): Se utiliza para transmitir los pulsos del reloj. Sincronizando el sistema.
+
+  Un ejemplo de conexión se puede apreciar en la @i2c_pins:
+  #figure(
+    image("./images/I2C_Pins.png"),
+    caption: [Diagrama de conexión de pines entre dos dispositivos que soportan el protocolo de comunicación I2C.]
+  ) <i2c_pins>
+
+  Un detalle importante dentro de este protocolo es el rol que cada dispositivo tiene dentro de la comunicación. Siempre se tiene un dispositivo maestro, encargado de dirigir la comunicación y otros dispositivos esclavos. Estos roles pueden alternar libremente durante _conversaciones_ de dispositivos, es posible que para una rutina un microcontrolador sea maestro y para otra sea el esclavo @carletti2007comunicacion.
 
   == Protocolo de _Handover_
 
