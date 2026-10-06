@@ -183,15 +183,37 @@
 
 #show heading.where(level: 2): it => {
   v(1em)
-  text(size: 15pt, weight: "bold")[#it.body]
+  text(size: 15pt, weight: "bold")[
+    #if it.numbering != none [
+      #counter(heading).display(it.numbering)
+      #h(0.5em)
+    ]
+    #it.body
+  ]
   v(0.5em)
 }
 
 #show heading.where(level: 3): it => {
   v(0.8em)
-  text(size: 13pt, weight: "bold", style: "italic")[#it.body]
+  text(size: 13pt, weight: "bold", style: "italic")[
+    #if it.numbering != none [
+      #counter(heading).display(it.numbering)
+      #h(0.5em)
+    ]
+    #it.body
+  ]
   v(0.4em)
 }
+
+// NOTE: add roman numerals instead of decimal numbers
+// #set heading(numbering: (..nums) => {
+//   let n = nums.pos()
+//   if n.len() == 1 {
+//     numbering("I", n.at(0))
+//   } else {
+//     numbering("I", n.at(0)) + "."+n.slice(1).map(str).join(".")
+//   }
+// })
 
 #let blankpage() = {
   pagebreak()
@@ -667,6 +689,8 @@
 
   Aunque hechas para casos de uso muy distintos, ambas llegaron a la misma conclusión, la forma de garantizar resiliencia a fallos, incluso en ambientes hostiles, es utilizar el poder de la misma computadora para revisar tu código. No hablan de IA, sino de _fuzz testing_, _unit testing_ y otra gran variedad de _xxx testing_. No basta solo el análisis estático, hay que poder garantizar de forma automatizada que la solución funciona y es resiliente a fallos, no porque el _linter_ no encuentre errores, sino porque años de simulación que ocurren en horas o días en tiempo real lo respaldan @software_should_work_2026 @greef_2026.
 
+  ==== SQLite
+
   (me gustaría expandir mucho más en las reglas de la NASA y en estos dos casos de _software_ resiliente pero me quedé sin tiempo para seguir escribiendo perdón Gabriel :"v)
 
 ]
@@ -680,7 +704,7 @@ Para el desarrollo de las bases del _software_ de vuelo de la computadora a bord
 + Un editor de código. 
 + El manejador de paquetes #link("https://nixos.org/")[Nix] (versión 2.34.8) con #link("https://nixos.wiki/wiki/flakes")[Nix Flakes] habilitados.
 + El #link("https://www.st.com/en/development-tools/stm32cubeide")[STM32CubeIDE] (versión 2.2.0), para generar la configuración del hardware.
-+ #link("https://openmv.io/pages/download")[OpenMV IDE], para interactuar con payload MILO.
++ #link("https://openmv.io/pages/download")[OpenMV IDE], para interactuar con la cámara de OpenMV de _Payload_ MILO.
 
 El archivo `flake.nix` del repositorio (se encuentra en la @source_code) lista todas las dependencias que el proyecto necesita a detalle, sin embargo, una lista con las principales es la siguiente:
 
