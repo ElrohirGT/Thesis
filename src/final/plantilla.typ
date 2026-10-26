@@ -53,12 +53,12 @@
 #let incluir-cuadros         = true
 #let incluir-resumen         = true
 #let incluir-abstract        = true
-#let incluir-prefacio        = true
+#let incluir-prefacio        = false
 #let incluir-introduccion    = true
-#let incluir-antecedentes    = true
+#let incluir-antecedentes    = false
 #let incluir-justificacion   = true
 #let incluir-objetivos       = true
-#let incluir-alcance         = true
+#let incluir-alcance         = false
 #let incluir-marco-teorico   = true
 #let incluir-conclusiones    = true
 #let incluir-recomendaciones = false
@@ -440,6 +440,12 @@
   // --- c-abstract.tex ---
   #set text(lang: "en")
   This is an abstract of the study developed under the
+
+  Quetzal-2 is a CubeSat 2U nanosatellite developed as an academic proyect by students and staff from the _Universidad del Valle de Guatemala_, this missions tests an On Board Computer (OBC) designed locally that executes an artificial inteligence capable of identifying clouds in pictures. This nanosatellite has an OBC made up of two processing units, the primary processing unit is based on commercial technology from GomSpace, the secondary OBC is developed locally and is powered by Portentas H7 from Arduino.
+
+  The OBCs are vital systems in a space mission because they manage every other subsystem from the satellite and the communication between them. This project focuses in the bases of the secondary OBC developed locally at a software level, building the bases for the different operation modes the mission requires, the capture of photography and the interoperability of the two processing units of the OBC.
+
+  The impact of this OBC developed locally represents a huge advancement on the starting point for next space missions, lowering the entry cost for developing space missions with respect to of-the-shelf solutions, since it proves that the use of space specialized hardware, which is relatively highly expensive is not a requirement for a successful mission.
   #set text(lang: "es")
 ]
 
