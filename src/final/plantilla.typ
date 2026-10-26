@@ -683,16 +683,31 @@
   + *Solamente es permitido un nivel de referencia con punteros*. Según la NASA, los punteros son fácilmente usados de forma incorrecta, incluso por programadores experimentados, pueden hacer que seguir el flujo de control de un programa sea complicado y reestringen las capacidades que tienen los analizadores de código estático.
   + *Todo el código debe ser compilado desde el primer día de desarrollo con todas las alertas del compilador en la configuración más pedante. El código debe compilar sin advertencias*. Según la NASA, no hay ninguna excusa por la que una _warning_ debería ser ignorada, incluyendo los falsos positivos. El código debe ser reescrito para facilitar su análisis estático y no confundir a la herramienta @holzmann_2006.
 
-  === Casos de estudio
+  === Fiabilidad en _Software_
 
   El espacio no es el único sector dentro del mundo del _software_ que necesita una resiliencia extraordinaria. Las bases de datos, son piezas de _software_ que deben funcionar incluso si el disco se corrompe, como es el caso de TigerBeetle @greef_2026. U otra base de datos venerada por su resiliencia a lo largo de los años, SQLite, con más de 1 billón de instancias en uso actualmente @software_should_work_2026.
 
   Aunque hechas para casos de uso muy distintos, ambas llegaron a la misma conclusión, la forma de garantizar resiliencia a fallos, incluso en ambientes hostiles, es utilizar el poder de la misma computadora para revisar tu código. No hablan de IA, sino de _fuzz testing_, _unit testing_ y otra gran variedad de _xxx testing_. No basta solo el análisis estático, hay que poder garantizar de forma automatizada que la solución funciona y es resiliente a fallos, no porque el _linter_ no encuentre errores, sino porque años de simulación que ocurren en horas o días en tiempo real lo respaldan @software_should_work_2026 @greef_2026.
 
-  ==== SQLite
+  ==== Fuzzing
 
-  (me gustaría expandir mucho más en las reglas de la NASA y en estos dos casos de _software_ resiliente pero me quedé sin tiempo para seguir escribiendo perdón Gabriel :"v)
+  Richard Hipp, uno de los creadores de SQLite, cuenta en su experiencia como desarrollador de este software que al alcanzar _100% branch coverage_, dejó de recibir reportes de bugs de sus usuarios por varios años @software_should_work_2026. Para entender esta métrica es importante entender primero qué es una "rama". En programación se asume que todas las instrucciones ejecutan una luego de la otra, sin embargo esto no siempre es cierto, es común en aplicaciones que ciertas instrucciones sean ejecutadas solamente cuando ciertas condiciones se cumplen. Esto genera caminos de instrucciones por los que el procesador puede o no pasar, todo el conjunto de estos caminos generan un árbol de posibles ejecuciones del programa en donde, según qué condiciones se cumplan, el procesador ejecutará una rama u otra @elmasry2013branchless. La @branch_simple demuestra cómo se vería este árbol de ejecución para un programa sencillo.
 
+  #figure(
+    image("./images/Ramas_Simple.png", width: 60%),
+    caption: [Árbol de ejecución de un programa simple. Nótese como cada función genera su propio bloque y algunas ramas tienen condiciones que deben cumplirse para ser ejecutadas.]
+  ) <branch_simple>
+
+  Éste árbol es justamente lo que programas como AFL++ exploran y es la segunda estrategia que usaron en SQLite para aliviar los bugs @software_should_work_2026. Su objetivo es variar de forma automática varios inputs del programa, lo que a su vez varía las condicinoes de ejecución de ciertas ramas, reportando solamente las ramas que hacen que el programa crashee, lo que a su vez ayuda a descubrir caminos que rara vez son ejecutados normalmente @bohme2020fuzzing. Hay dos tipos principales de _fuzzing_:
+
+  - Mutacional: La campaña de fuzzing inicia con varias "semillas". Luego estas semillas son modificadas para generar nuevas entradas al programa.
+  - Generacional: Las entradas son generadas desde 0, si se especifica un formato entonces se generan entradas que cumplan ese formato. Solamente las entradas que más profundo lleguen a explorar el sistema son evolucionadas a la siguiente ronda @bohme2020fuzzing.
+
+  ==== LLMs
+
+  Richar Hipp menciona que recientemente, a pesar de todos los pasos que ha tomado para asegurarse que el código de SQLite es lo más libre de bugs posible, los LLMs han encontrado formas exóticas de ejecución de código que revelan vulnerabilidades en su código @software_should_work_2026.
+
+  Por lo tanto los LLMs deben ser considerados, cuanto mínimo, como un linter más que pueden ayudar a revisar el código y proponer mejoras. Curiosamente, este uso no se alinea más a las propiedades innatas de ellos, siendo estocásticos y alucinando de vez en cuando.
 ]
 
 = Metodología
@@ -880,7 +895,7 @@ caption: [Máquina de Estados Finitos (incompleta) de la OBC secundaria del Quet
 alt: "Máquina de Estados Finitos (incompleta) de la OBC secundaria del Quetzal-2. Elaboración propia.",
 ) <finite_state_machine>
 
-Para mejorar el determinismo de esta máquina de estados, todas las taeas que necesitan comunicación con un sistema externo al _core_ de la OBC secundaria, por ejemplo interactuar con subsistemas, se realizaron por medio de interfaces. De esta forma se tiene una arquitectura como la descrita en la @hexagonal_arch.
+Para mejorar el determinismo de esta máquina de estados, todas las tareas que necesitan comunicación con un sistema externo al _core_ de la OBC secundaria, por ejemplo interactuar con subsistemas, se realizaron por medio de interfaces. De esta forma se tiene una arquitectura como la descrita en la @hexagonal_arch.
 
 #mermaid-figure("
 flowchart LR
@@ -919,6 +934,7 @@ Esta arquitectura de la @hexagonal_arch nos permitió varias bondades:
 - Nos permitió intercambiar todos los subsistemas (en amarillo) por implementaciones que funcionen o fallen de formas predecibles.
 - Se logró simular entradas y salidas de los distintos subsistemas a voluntad sin necesidad de conectar físicamente todo el sistema o que siquiera se encuentre desarrollado.
 - Se automatizaron las pruebas de comportamiento de la OBC ante una gran variedad de entradas de los distintos submódulos.
+- Automatización de generación de casos de prueba con _fuzzing_ en AFL++.
 
 = Resultados
 
@@ -933,8 +949,8 @@ Esta arquitectura de la @hexagonal_arch nos permitió varias bondades:
 ) <handover_test>
 
 #figure(
-  image("./images/RFReception.jpeg", width: 60%),
-  caption: [_Logs_ de la prueba de handover desde la perspectiva de la A3200 (la imagen es placeholder no logré conseguir la correcta Gabriel jaja)]
+  image("./images/Command_reception.jpeg", width: 60%),
+  caption: [Prueba del protocolo de handover corriendo con hardware real entre la computadora primaria y secundaria. Realizado durante la visita de David Cuartielles, cofundador de Arduino y Andrés Sabas, fundador de Electronic Cats.]
 ) <command_reception>
 
 #figure(
