@@ -41,7 +41,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   \item Una OBC que permite la comunicación entre todos estos subsistemas.
 \end{itemize}
 
-  En el caso de Quetzal-2, la OBC realmente se divide en 2, una principal y una secundaria. La OBC principal, es la misma que se utilizó en Quetzal-1, la Gomspace Nanomind A3200 \cite{ayerdi_2023}, esta computadora fue especialmente diseñada para misiones espaciales, como sensores integrados para control de altitud y protecciones especiales contra radiación \cite{gomspace_2026}.
+  En el caso de Quetzal-2, la OBC realmente se divide en 2, una principal y una secundaria. La OBC principal, es la misma que se utilizó en Quetzal-1, la Gomspace Nanomind A3200 \cite{ayerdi_2023}, esta computadora fue especialmente diseñada para misiones espaciales, como sensores integrados para control de actitud y protecciones especiales contra radiación \cite{gomspace_2026}.
 
   La OBC secundaria, la cual es diseñada localmente, está compuesta por una pareja de Portentas H7 Lite, ambas cuentan con dos cores de procesamiento y 8MB de SDRAM \cite{arduino_2026}. La OBC secundaria, al igual que la primaria, necesita gestionar la comunicación entre los distintos subsistemas, por lo que se le considera el cerebro del satélite \cite{lwabanji_wilkinson_biermann_bellville_2013} y según \cite{stras2003design} necesita cumplir con las siguientes tareas:
 \begin{itemize}
@@ -63,14 +63,14 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   \label{fig:obc_components}
 \end{figure}
 
-  \section{Comunicación Serial: I2C y UART}
+  \section{Comunicación Serial: I2C y RS485}
 
   Existen varias interfaces seriales de comunicación que se pueden utilizar para la intercomunicación de microcontroladores, muchas aunque desarrolladas para una aplicación en específico se han vuelto universales, RS485 e I2C caen en esta categoría \cite{hung2020flexible}. Dentro del Quetzal-2 se utilizan estos dos protocolos para la comunicación interna entre sus subsistemas, RS485 es especialmente popular debido a que permite conectar múltiples puntos de control utilizando un bus serial, además de ser un protocolo de comunicación probado en producción por años lo que lo hace una opción segura cuanto menos \cite{sastry2015building}. Mientras que I2C facilita la comunicación entre microcontroladores utilizando un modelo de maestro esclavo, en donde solo el maestro puede iniciar la comunicación \cite{carletti2007comunicacion}.
 
   Dentro de Quetzal-2, los protocolos se utilizan para los siguientes propósitos:
 	\begin{itemize}
-\item {RS485: Comunica la OBC primaria y secundaria con el resto de subsistemas del satélite, es decir: \textit{Payload} MILO, \textit{ADCS}, \textit{ADM}, etc. Se utiliza el protocolo de \textit{hardware} UART para su implementación.}
-	\item {I2C: Se reserva únicamente para la comunicación entre la OBC primaria y la OBC secundaria, siendo la OBC primaria la maestra y la OBC secundaria la esclava. Esta decisión es clave para el funcionamiento de la arquitectura de \textit{handover}.}
+		\item {RS485: Comunica la OBC primaria y secundaria con el resto de subsistemas del satélite, es decir: \textit{Payload} MILO, \textit{ADCS}, \textit{EPS}, \textit{Payload} LORA, etc. Se utiliza el protocolo de \textit{hardware} UART para su implementación.}
+	\item {I2C: Se utiliza para la comunicación entre la OBC primaria y la OBC secundaria, siendo la OBC primaria la maestra y la OBC secundaria la esclava. Esta decisión es clave para el funcionamiento de la arquitectura de \textit{handover}.}
 	\end{itemize}
 
 \subsection{UART}
@@ -88,7 +88,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 \end{figure}
 
   \subsection{RS485}
-  El protocolo RS485 se basa en el protocolo RS422, su principal ventaja con respecto a RS422 es que permite la conexión de hasta 32 dispositivos (tanto transmisores como receptores) mientras que RS422 solamente admite 10 receptores y un transmisor. RS485 hereda de RS422 su alta resistencia al ruido, ya que utiliza una corriente diferencial entre dos cables para transmitir la señal, cuya conexión se ve en la \ref{fig:rs485_pins}. Lo que significa que un byte que se transmite no es un pulso de corriente dentro de un solo cable, sino una diferencia de corriente entre ambas líneas de conexión del protocolo, el \ref{tab:rs485_truth_table} muestra una tabla de verdad con la entrada y cómo se transmite por los cables. Al protocolo solamente le interesa la diferencia entre ambas líneas, por lo que mientras pueda interpretar a una línea como 0 y a otra como 1 seguirá funcionando, lo que lo hace altamente resiliente a ruido \cite{sonnenberg2018serial}.
+  El protocolo RS485 se basa en el protocolo RS422, su principal ventaja con respecto a RS422 es que permite la conexión de hasta 32 dispositivos (tanto transmisores como receptores) mientras que RS422 solamente admite 10 receptores y un transmisor. RS485 hereda de RS422 su alta resistencia al ruido, ya que utiliza un voltaje diferencial entre dos cables para transmitir la señal, cuya conexión se ve en la \ref{fig:rs485_pins}. Lo que significa que un byte que se transmite no es un pulso de corriente dentro de un solo cable, sino una diferencia de corriente entre ambas líneas de conexión del protocolo, el \ref{tab:rs485_truth_table} muestra una tabla de verdad con la entrada y cómo se transmite por los cables. Al protocolo solamente le interesa la diferencia entre ambas líneas, por lo que mientras pueda interpretar a una línea como 0 y a otra como 1 seguirá funcionando, lo que lo hace altamente resiliente a ruido \cite{sonnenberg2018serial}.
 
   % #figure(
   %   image("./images/RS485_Pins.png"),
@@ -131,8 +131,8 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   Al igual que RS485, I2C es un protocolo de comunicación serial entre dispositivos, la transmisión de datos es serial y sincrónica, lo que implica el paso de un pulso de reloj para sincronizar la salida y entrada de los datos entre los dispositivos. Requiere de dos líneas de conexión \cite{carletti2007comunicacion}:
 
 	\begin{itemize}
-\item {SDA (\textit{System Data}): Se utiliza para transmitir los datos entre los dispositivos.}
-  \item {SCL (\textit{System Clock}): Se utiliza para transmitir los pulsos del reloj. Sincronizando el sistema.}
+\item {SDA (\textit{Serial Data}): Se utiliza para transmitir los datos entre los dispositivos.}
+  \item {SCL (\textit{Serial Clock}): Se utiliza para transmitir los pulsos del reloj. Sincronizando el sistema.}
 	\end{itemize}
 
   Un ejemplo de conexión se puede apreciar en la \ref{fig:i2c_pins}.
@@ -184,7 +184,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   \item {\textbf{Todos los ciclos deben tener un límite superior fijo}. Sin recursión, y con ciclos que siguen un límite fijo de iteraciones se previene en su totalidad rutinas que se ejecutan de forma indefinida. Esta regla no aplica para rutinas que deben ser forzosamente de terminación indeterminada, como la espera de nuevos comandos de la estación terrena (GCS por sus siglas en inglés).}
   \item {\textbf{No alojar memoria dinámica luego de la inicialización}. La alojación de memoria dinámica impacta negativamente en el rendimiento del sistema, además de que tiene un comportamiento notablemente difícil de predecir con análisis estático. Esta regla fuerza al programador a usar memoria estática alojada al declarar variables en el stack, si se combina con las reglas anteriores el código termina siendo legible y sencillo, lo que es excelente para analizadores estáticos que buscan probar que un programa se comportará como esperamos.}
   \item {\textbf{No más de 60 líneas de código por función}. Funciones extremadamente largas son una señal de código pobremente arquitecturizado.}
-  \item {\textbf{Cada función debe tener un promedio de dos \textit{assertions}}. La NASA recomienda utilizar aserciones en el código para probar condiciones de ejecución tanto antes como después de correr una función. Una aserción siempre revisa una condición, y detiene el programa en caso de que la condición no se cumpla, son especialmente útiles si se combinan con pruebas unitarias.}
+  \item {\textbf{Cada función debe tener un promedio de dos \textit{assertions}}. La NASA recomienda utilizar aserciones en el código para probar condiciones de ejecución tanto antes como después de correr una función. Una aserción siempre revisa una condición, en dado caso la condición falle se toma una acción de recuperación que se programó explícitamente para manejar este caso. Las aserciones deben ser libres de efectos secundarios.}
   \item {\textbf{Declara todos los objetos de tipo data en el tamaño mínimo posible de \textit{scope}}. Esta regla simplifica la depuración del código cuando ocurre una falla, puesto que es obvio que una variable que no se encuentra en el scope del código que falla no tiene ninguna relación con el error en sí. Por lo tanto queremos minimizar la cantidad de variables dentro del scope de cada rutina, limitando así, los lugares en donde se puede corromper estado y afectar en la ejecución de nuestro programa.}
   \item {\textbf{Todos los parámetros de retorno deben ser revisados por la función que los llamó}. \textbf{Todas las funciones deben revisar la validez de los parámetros proveídos}. Las interfaces con las que interactuamos los programadores están plagadas de funciones que puede que funcionen como esperamos o no, generalmente tienen una forma de reportar un error. Si una función debe ejecutarse solamente cuando el valor de retorno de otra función es exitoso, entonces es indispensable que este valor de retorno se revise, ese es el corazón de esta regla.}
   \item {\textbf{El uso del preprocesador de C debe estar limitado a inclusión de \textit{header files} y definiciones sencillas}. El preprocesador de C puede fácilmente ofuscar el código y confundir a analizadores estáticos, por lo que la NASA no recomienda su uso más allá de inclusiones sencillas.}
@@ -199,7 +199,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 
   \subsubsection{Fuzzing}
 
-  Richard Hipp, uno de los creadores de SQLite, cuenta en su experiencia como desarrollador de este software que al alcanzar 100\% \textit{branch coverage}, dejó de recibir reportes de bugs de sus usuarios por varios años \cite{software_should_work_2026}. Para entender esta métrica es importante entender primero qué es una "rama". En programación se asume que todas las instrucciones ejecutan una luego de la otra, sin embargo esto no siempre es cierto, es común en aplicaciones que ciertas instrucciones sean ejecutadas solamente cuando ciertas condiciones se cumplen. Esto genera caminos de instrucciones por los que el procesador puede o no pasar, todo el conjunto de estos caminos generan un árbol de posibles ejecuciones del programa en donde, según qué condiciones se cumplan, el procesador ejecutará una rama u otra \cite{elmasry2013branchless}. La \ref{fig:branch_simple} demuestra cómo se vería este árbol de ejecución para un programa sencillo.
+  Richard Hipp, uno de los creadores de SQLite, cuenta en su experiencia como desarrollador de este software que al alcanzar 100\% \textit{branch coverage}, dejó de recibir reportes de bugs de sus usuarios por varios años \cite{software_should_work_2026}. Para entender esta métrica es importante entender primero qué es una "rama". En programación se asume que todas las instrucciones ejecutan una luego de la otra, sin embargo esto no siempre es cierto, es común en aplicaciones que ciertas instrucciones sean ejecutadas solamente cuando ciertas condiciones se cumplen. Esto genera bloques de instrucciones por los que el procesador puede o no pasar, todo el conjunto de estos bloques generan un árbol de posibles ejecuciones del programa en donde, según qué condiciones se cumplan, el procesador ejecutará una rama u otra \cite{elmasry2013branchless}. La \ref{fig:branch_simple} demuestra cómo se vería este árbol de ejecución para un programa sencillo.
 
   % #figure(
   %   image("./images/Ramas_Simple.png", width: 60%),
@@ -212,7 +212,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   \label{fig:branch_simple}
 \end{figure}
 
-  Éste árbol es justamente lo que programas como AFL++ exploran y es la segunda estrategia que usaron en SQLite para aliviar los bugs \cite{software_should_work_2026}. Su objetivo es variar de forma automática varios inputs del programa, lo que a su vez varía las condicinoes de ejecución de ciertas ramas, reportando solamente las ramas que hacen que el programa crashee, lo que a su vez ayuda a descubrir caminos que rara vez son ejecutados normalmente \cite{bohme2020fuzzing}. Hay dos tipos principales de \textit{fuzzing}:
+  Éste árbol es justamente lo que programas como AFL++ exploran y es la segunda estrategia que usaron en SQLite para aliviar los bugs \cite{software_should_work_2026}. Su objetivo es variar de forma automática varios inputs del programa, lo que a su vez varía las condicinoes de ejecución de ciertas ramas, reportando solamente las ramas que hacen que el programa falle alguno de los chequeos que el programador defina, lo que a su vez ayuda a descubrir caminos que rara vez son ejecutados normalmente \cite{bohme2020fuzzing}. Hay dos tipos principales de \textit{fuzzing}:
 	\begin{itemize}
 \item Mutacional: La campaña de fuzzing inicia con varias "semillas". Luego estas semillas son modificadas para generar nuevas entradas al programa.
 		\item Generacional: Las entradas son generadas desde 0, si se especifica un formato entonces se generan entradas que cumplan ese formato. Solamente las entradas que más profundo lleguen a explorar el sistema son evolucionadas a la siguiente ronda \cite{bohme2020fuzzing}.

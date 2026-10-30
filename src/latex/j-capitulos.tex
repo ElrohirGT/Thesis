@@ -313,3 +313,30 @@ Esta arquitectura de la \ref{fig:hexagonal_arch} nos permitió varias bondades:
   \caption{\textit{Coverage Report} del fuzzing del core de la OBC.}
   \label{fig:obc_coverage}
 \end{figure}
+
+\newpage
+\chapter{Discusión de Resultados}
+Como se puede apreciar en la \ref{fig:laptop_test}, se realiza el camino sin errores de una rutina de handover completa, desde que la OBC primaria solicita el traslado de poder, pasando por el inicio de la tarea de MILO en donde se toma la fotografía y finalizando con el comando de abortar de la OBC primaria.
+
+Toda esa rutina se ejecutó dentro de un ambiente simulado en la computadora, y cada una de las respuestas y acciones que decidía tomar la OBC secundaria fue analizada por la prueba, solamente retornando éxito si todos los comandos recibidos y enviados seguían la especificación del protocolo interno. Es decir, la prueba revisó que luego de recibir el comando \texttt{BEGIN\_HANDOVER} desde la computadora principal, la OBC secundaria respondiera con \texttt{BEGIN\_HANDOVER\_ACK}. No solo se limitó a revisar el estado, sino que además revisa cada uno de los \textit{bytes} de la respuesta y el largo configurado por el \textit{buffer} de salida.
+
+Nótese el cambio de estados dentro de la OBC secundaria que se puede apreciar en los \textit{logs}, iniciando en \texttt{IDLE} para transicionar a \texttt{HANDOVER\_IDLE} y finalmente a \texttt{IDLE} de nuevo. Estos son los estados principales de la OBC secundaria, mientras que el estado interno de la tarea es \texttt{MILO\_UNSTARTED}. La combinación de estos dos estados (\texttt{IDLE}, \texttt{MILO\_UNSTARTED}) representan el modo de operación de arranque dentro del Producto Mínimo Viable (MVP por sus siglas en inglés) de la OBC secundaria. Para luego transicionar al estado nominal (\texttt{HANDOVER\_IDLE}, \texttt{MILO\_UNSTARTED}), para finalmente llegar al estado de toma de fotografía (\texttt{HANDOVER\_IDLE}, \texttt{MILO\_BEGIN}). La \ref{fig:obc_states} muestra en forma de diagrama estas transiciones:
+
+% #figure(
+%   image("./images/OBC_States.png", width: 80%),
+%   caption: [Estados de la OBC secundaria de estados finitos.]
+% ) <obc_states>
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\linewidth]{./images/OBC_States.png}
+  \caption{Estados de la OBC secundaria de estados finitos.}
+  \label{fig:obc_states}
+\end{figure}
+
+Esta es la prueba principal que se implementó, pero gracias a la arquitectura hexagonal se tiene la posibilidad de implementar muchas más que prueben casos más extraños, o simplemente probar casos de error que permitan asegurar que la OBC fallará de una manera predecible cuando se cumplan ciertas condiciones. Esto es parte de las opciones de \textit{testing} que se vieron en el capítulo \ref{sec:reliability}.
+
+Además, se utilizó AFL++ para implementar un \textit{fuzzer} básico de la rutina principal de la OBC secundaria (\ref{fig:obc_fuzzing}), en la imagen en cuestión se puede apreciar que el \textit{fuzzer} lleva corriendo apenas 3 segundos pero ya corrió más de 8900 veces la rutina principal. De las cuales ha encontrado 3 nuevas aristas pero no ha encontrado \textit{crashes} todavía. El \textit{harness} programado para esta sesión de \textit{fuzzing} es limitado, de hecho podemos ver en \ref{fig:obc_coverage} que este \textit{harness} no es particularmente bueno, puesto que solamente 5 de 180 ramas que componen la rutina principal fueron invocadas durante esta sesión. Lo cual es esperado debido a que el \textit{harness} configurado para esta prueba es una prueba de concepto, su función principal es validar que la arquitectura efectivamente se puede utilizar para pruebas avanzadas de código que verifiquen su fiabilidad.
+
+El que la prueba mostrada en la \ref{fig:laptop_test} tenga un resultado satisfactorio no significa que la OBC secundaria funcione, puesto que es un ambiente simulado dentro de la misma computadora. Por esto se realizaron pruebas con implementaciones reales de las interfaces, las cuales se pueden ver en la \ref{fig:handover_test} y la \ref{fig:command_reception}. En esta prueba se intentó solamente la comunicación entre los dos módulos de la OBC, primaria y secundaria. Como se puede ver en los \textit{logs}, la comunicación fue satisfactoria y se logró llegar al último comando de aborto del protocolo de handover.
+
+Finalmente, en la \ref{fig:milo_picture} se puede apreciar la fotografía de una prueba final con todos los subsistemas conectados utilizando las implementaciones reales de las interfaces de comunicación. La imagen se encuentra borrosa debido a la configuración de la cámara, ya que se tenía en baja calidad para limitar la cantidad de espacio que cada fotografía consumía al ser almacenada y transmitida dentro del sistema. Para ese punto de las pruebas lo importante no era la calidad de las fotografías sino que el sistema pudiera tomarla de forma autónoma.
