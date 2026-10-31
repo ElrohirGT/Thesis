@@ -11,9 +11,9 @@
   \label{fig:prototype_quetzal2}
 \end{figure}
 
-El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial de la Universidad del Valle de Guatemala, el cual es desarrollado por estudiantes y personal académico de la institución \cite{quetzal_2}.
+El Quetzal-2 (Figura \ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial de la Universidad del Valle de Guatemala, el cual es desarrollado por estudiantes y personal académico de la institución \cite{quetzal_2}.
 
-  Su predecesor, el Quetzal-1 (\ref{fig:cubesat_quetzal1}), fue el primer satélite guatemalteco, cuya misión buscaba probar un sensor multiespectral para adquirir información remota para conservar recursos naturales de forma independiente \cite{quetzal_1}. El trabajo realizado para Quetzal-1 representa las bases para el nuevo y mejorado Quetzal-2, el cual busca poner a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada localmente, capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales. Así como validará un subsistema para desorbitación responsable y permitirá transmitir datos satelitales en tiempo real a centros educativos del país \cite{quetzal_2}.
+  Su predecesor, el Quetzal-1 (Figura \ref{fig:cubesat_quetzal1}), fue el primer satélite guatemalteco, cuya misión buscaba probar un sensor multiespectral para adquirir información remota para conservar recursos naturales de forma independiente \cite{quetzal_1}. El trabajo realizado para Quetzal-1 representa las bases para el nuevo y mejorado Quetzal-2, el cual busca poner a prueba una computadora a bordo (OBC por sus siglas en inglés) diseñada localmente, capaz de ejecutar un modelo de inteligencia artificial para identificar nubes en imágenes satelitales. Así como validará un subsistema para desorbitación responsable y permitirá transmitir datos satelitales en tiempo real a centros educativos del país \cite{quetzal_2}.
 
   % #figure(
   %   image("./images/Quetzal-1.jpg", width: 40%),
@@ -50,7 +50,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   \item {Monitoreo y gestión de subsistemas, incluso reiniciando los que sean necesarios.}
 \end{itemize}
 
-  Generalmente, la OBC no se encarga de el manejo de energía, en su lugar un subsistema por aparte (el EPS) se encarga de apagar y reinciar sistemas dentro del satélite. Aunque sí hay casos en donde tal tarea se le atribuye a la OBC \cite{hidayat_2010}. La \ref{fig:obc_components} muestra cómo se organizan los componentes de la OBC de Quetzal-2 así como la forma de comunicación con otros submódulos:
+  Generalmente, la OBC no se encarga de el manejo de energía, en su lugar un subsistema por aparte (el EPS) se encarga de apagar y reinciar sistemas dentro del satélite. Aunque sí hay casos en donde tal tarea se le atribuye a la OBC Figura \cite{hidayat_2010}. La Figura \ref{fig:obc_components} muestra cómo se organizan los componentes de la OBC de Quetzal-2 así como la forma de comunicación con otros submódulos:
 
   % #figure(
   %   image("./images/OBC_Diagram.png"),
@@ -74,7 +74,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 	\end{itemize}
 
 \subsection{UART}
-  El protocolo \textit{Universal Asynchronous Receiver-Transmitter} (UART) es uno de los protocolos de hardware más usados para comunicación entre dispositivos. El protocolo necesita de dos pines: uno para recibir información, llamado comúnmente `RX` y otro para enviar información, llamado `TX`. Ambos se conectan de forma cruzada entre los dispositivos para lograr así la recepción y comunicación de datos en ambos dispositivos \cite{pena2020uart}, como se ve en la \ref{fig:uart_pins}.
+  El protocolo Figura \textit{Universal Asynchronous Receiver-Transmitter} (UART) es uno de los protocolos de hardware más usados para comunicación entre dispositivos. El protocolo necesita de dos pines: uno para recibir información, llamado comúnmente `RX` y otro para enviar información, llamado `TX`. Ambos se conectan de forma cruzada entre los dispositivos para lograr así la recepción y comunicación de datos en ambos dispositivos \cite{pena2020uart}, como se ve en la Figura \ref{fig:uart_pins}.
 
   % #figure(
   %   image("./images/UART_Pins.png"),
@@ -88,7 +88,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 \end{figure}
 
   \subsection{RS485}
-  El protocolo RS485 se basa en el protocolo RS422, su principal ventaja con respecto a RS422 es que permite la conexión de hasta 32 dispositivos (tanto transmisores como receptores) mientras que RS422 solamente admite 10 receptores y un transmisor. RS485 hereda de RS422 su alta resistencia al ruido, ya que utiliza un voltaje diferencial entre dos cables para transmitir la señal, cuya conexión se ve en la \ref{fig:rs485_pins}. Lo que significa que un byte que se transmite no es un pulso de corriente dentro de un solo cable, sino una diferencia de corriente entre ambas líneas de conexión del protocolo, el \ref{tab:rs485_truth_table} muestra una tabla de verdad con la entrada y cómo se transmite por los cables. Al protocolo solamente le interesa la diferencia entre ambas líneas, por lo que mientras pueda interpretar a una línea como 0 y a otra como 1 seguirá funcionando, lo que lo hace altamente resiliente a ruido \cite{sonnenberg2018serial}.
+  El protocolo RS485 se basa en el protocolo RS422, su principal ventaja con respecto a RS422 es que permite la conexión de hasta 32 dispositivos (tanto transmisores como receptores) mientras que RS422 solamente admite 10 receptores y un transmisor. RS485 hereda de RS422 su alta resistencia al ruido, ya que utiliza un voltaje diferencial entre dos cables para transmitir la señal, cuya conexión se ve en la Figura \ref{fig:rs485_pins}. Lo que significa que un byte que se transmite no es un pulso de corriente dentro de un solo cable, sino una diferencia de corriente entre ambas líneas de conexión del protocolo, el Cuadro \ref{tab:rs485_truth_table} muestra una tabla de verdad con la entrada y cómo se transmite por los cables. Al protocolo solamente le interesa la diferencia entre ambas líneas, por lo que mientras pueda interpretar a una línea como 0 y a otra como 1 seguirá funcionando, lo que lo hace altamente resiliente a ruido \cite{sonnenberg2018serial}.
 
   % #figure(
   %   image("./images/RS485_Pins.png"),
@@ -135,7 +135,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
   \item {SCL (\textit{Serial Clock}): Se utiliza para transmitir los pulsos del reloj. Sincronizando el sistema.}
 	\end{itemize}
 
-  Un ejemplo de conexión se puede apreciar en la \ref{fig:i2c_pins}.
+  Un ejemplo de conexión se puede apreciar en la Figura \ref{fig:i2c_pins}.
   % #figure(
   %   image("./images/I2C_Pins.png"),
   %   caption: [Diagrama de conexión de pines entre dos dispositivos que soportan el protocolo de comunicación I2C.]
@@ -153,7 +153,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 
   El protocolo de \textit{handover} es un sistema interno de la OBC primaria, diseñado localmente, cuyo objetivo principal es trasladar el control del satélite de sí misma a la OBC secundaria de una forma segura y redundante a fallos. Quetzal-2 no es la única misión que ha integrado más de una OBC en su sistema de mando, SHEFEX III, una misión alemana del 2017 también usó dos OBCs para redundancia, sin embargo su estrategia nunca fue ceder control de una OBC a la otra sino tener un backup en caso alguna de la dos fallara \cite{schwarz2014fault}. Otro ejemplo es la arquitectura DHS propuesta en 2023 para misiones académicas como profesionales \cite{soucaille2023high}. Esta arquitectura en específico también se usó en el mismo año para otra misión espacial, la misión HERA, de la misma forma su principal objetivo era redundancia total, pero además buscaba autonomía operacional y alta capacidad de almacenamiento a bordo \cite{Marcos_Valverde_Carretero_2023}.
 
-  Una descripción general del protocolo se puede ver en la \ref{fig:handover_sequence}. En donde se tiene a los 3 actores principales: A3200 representando la computadora principal, Portenta H7, representando la portenta que está activa en ese momento y SAMD, representando a el módulo que se necesita para una tarea, por ejemplo MILO.
+  Una descripción general del protocolo se puede ver en la Figura \ref{fig:handover_sequence}. En donde se tiene a los 3 actores principales: A3200 representando la computadora principal, Portenta H7, representando la portenta que está activa en ese momento y SAMD, representando a el módulo que se necesita para una tarea, por ejemplo MILO.
 
   % #figure(
   %   image("./images/OBC_Routines.png"),
@@ -199,7 +199,7 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 
   \subsubsection{Fuzzing}
 
-  Richard Hipp, uno de los creadores de SQLite, cuenta en su experiencia como desarrollador de este software que al alcanzar 100\% \textit{branch coverage}, dejó de recibir reportes de bugs de sus usuarios por varios años \cite{software_should_work_2026}. Para entender esta métrica es importante entender primero qué es una "rama". En programación se asume que todas las instrucciones ejecutan una luego de la otra, sin embargo esto no siempre es cierto, es común en aplicaciones que ciertas instrucciones sean ejecutadas solamente cuando ciertas condiciones se cumplen. Esto genera bloques de instrucciones por los que el procesador puede o no pasar, todo el conjunto de estos bloques generan un árbol de posibles ejecuciones del programa en donde, según qué condiciones se cumplan, el procesador ejecutará una rama u otra \cite{elmasry2013branchless}. La \ref{fig:branch_simple} demuestra cómo se vería este árbol de ejecución para un programa sencillo.
+  Richard Hipp, uno de los creadores de SQLite, cuenta en su experiencia como desarrollador de este software que al alcanzar 100Figura \% \textit{branch coverage}, dejó de recibir reportes de bugs de sus usuarios por varios años \cite{software_should_work_2026}. Para entender esta métrica es importante entender primero qué es una "rama". En programación se asume que todas las instrucciones ejecutan una luego de la otra, sin embargo esto no siempre es cierto, es común en aplicaciones que ciertas instrucciones sean ejecutadas solamente cuando ciertas condiciones se cumplen. Esto genera bloques de instrucciones por los que el procesador puede o no pasar, todo el conjunto de estos bloques generan un árbol de posibles ejecuciones del programa en donde, según qué condiciones se cumplan, el procesador ejecutará una rama u otra \cite{elmasry2013branchless}. La Figura \ref{fig:branch_simple} demuestra cómo se vería este árbol de ejecución para un programa sencillo.
 
   % #figure(
   %   image("./images/Ramas_Simple.png", width: 60%),
@@ -236,4 +236,4 @@ El Quetzal-2 (\ref{fig:prototype_quetzal2}) es el segundo proyecto aeroespacial 
 
 	Otro punto a tomar en cuenta cuando se desarrollan sistemas para aplicarles DST son lo que Phil llama aristas. Tarde o temprano la aplicación deberá interactuar con partes que no son deterministas, justamente estas partes son las que estamos empaquetando en una interfaz y simulando dentro del DST. Estas son las aristas de la aplicación. Mientras más aristas tengamos menos código real estaremos probando y por lo tanto, las recompensas de aplicar DST disminuyen, por lo tanto es importante maximizar la cantidad de código que podemos revisar y que esté dentro de lo que el simulador prueba y el código final que compilaremos a producción \cite{eaton-2024}.
 
-	Por último, Will Wilson recalca que lo más difícil de construir un DST no es el DST en sí mismo, es verificar que está funcionando correctamente, es decir, que efectivamente está explorando casos interesantes dentro de el código encontrando bugs. Según él, es muy sencillo construir un simulador que finge estar trabajando cuando en realidad no está explorando mucho del espacio de posibles estados (ver \ref{fig:branch_simple}) del sistema. Además, menciona que desafortunadamente y a diferencia de \textit{fuzzing} no se puede usar el \textit{branch coverage} como guía, y generalmente es una métrica muy mala para la clase de sistemas que querrías probar con DST \cite{eaton-2024}.
+	Por último, Will Wilson recalca que lo más difícil de construir un DST no es el DST en sí mismo, es verificar que está funcionando correctamente, es decir, que efectivamente está explorando casos interesantes dentro de el código encontrando bugs. Según él, es muy sencillo construir un simulador que finge estar trabajando cuando en realidad no está explorando mucho del espacio de posibles estados (ver Figura \ref{fig:branch_simple}) del sistema. Además, menciona que desafortunadamente y a diferencia de \textit{fuzzing} no se puede usar el \textit{branch coverage} como guía, y generalmente es una métrica muy mala para la clase de sistemas que querrías probar con DST \cite{eaton-2024}.
