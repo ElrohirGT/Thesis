@@ -260,6 +260,21 @@
     \addcontentsline{toc}{chapter}{Prefacio}
 \fi
 
+% ==============================================================================
+% AGRADECIMIENTOS
+% ------------------------------------------------------------------------------
+\ifdefined\CAPagradecimientos
+	\newpage
+	\cleardoublepage\phantomsection
+    \chapter*{Agradecimientos}
+    \ifdefined\parpordefecto
+    	\defaultparformat{aa-agradecimientos}
+    \else
+    	\input{aa-agradecimientos}
+    \fi
+    \addcontentsline{toc}{chapter}{Agradecimientos}
+\fi
+
 % ÍNDICE GENERAL
 % ------------------------------------------------------------------------------
 \ifdefined\CAPindice
